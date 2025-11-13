@@ -8,7 +8,7 @@ use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\EvolutionController;
 use App\Http\Controllers\ExamChatController;
-use App\Http\Controllers\ChatModuleController; // Importe o novo controlador
+use App\Http\Controllers\ChatModuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    // Rotas de perfil de usu\u00e1rio
+    // Rotas de perfil de usuário
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -33,11 +33,11 @@ Route::middleware('auth')->group(function () {
     // Rotas para Pacientes
     Route::resource('pacientes', PatientController::class);
 
-    // Rotas para Upload de Exames (mantidas, mas a prioridade de uso ser\u00e1 no novo m\u00f3dulo de chat)
+    // Rotas para Upload de Exames
     Route::get('/exames/upload', [ExamUploadController::class, 'showUploadForm'])->name('exams.upload.form');
     Route::post('/exames/upload', [ExamUploadController::class, 'handleUpload'])->name('exams.upload.handle');
 
-    // Rotas para Exames (listagem e visualiza\u00e7\u00e3o)
+    // Rotas para Exames (listagem e visualização)
     Route::get('/exames', [ExamController::class, 'index'])->name('exames.index');
     Route::get('/exames/{exam}', [ExamController::class, 'show'])->name('exames.show');
 
@@ -48,19 +48,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/laudos', [ExameLaudoController::class, 'index'])->name('laudos.index');
     Route::get('/laudos/{report}', [ExameLaudoController::class, 'showReport'])->name('reports.show');
 
-    // Rotas para Evolu\u00e7\u00e3o do Paciente
+    // Rotas para Evolução do Paciente
+    // CORRIGIDO: Rota GET para exibir o formulário de seleção (index)
     Route::get('/evolucao', [EvolutionController::class, 'index'])->name('evolucao.index');
+    // Rota POST para processar a análise
     Route::post('/evolucao/analisar', [EvolutionController::class, 'analyzeEvolution'])->name('evolucao.analyze');
 
     // Rota para a interface de chat do exame (destino do redirecionamento)
     Route::get('/exames/{exam}/chat', [ExamChatController::class, 'showChatInterface'])->name('exames.chat');
 
-    // **** NOVAS ROTAS PARA O M\u00d3DULO DE CHAT ESPEC\u00cdFICO ****
+    // **** NOVAS ROTAS PARA O MÓDULO DE CHAT ESPECÍFICO ****
     Route::get('/chat/upload', [ChatModuleController::class, 'showUploadFormForChat'])->name('chat.upload.form');
     Route::post('/chat/upload', [ChatModuleController::class, 'handleUploadAndRedirectToChat'])->name('chat.upload.handle');
 });
 
-// Rota de API para chat (para requisi\u00e7\u00f5es AJAX do React)
+// Rota de API para chat (para requisições AJAX do React)
 Route::post('/api/exames/{exam}/chat', [ExamChatController::class, 'handleChatMessage'])->name('api.exames.chat');
 
 require __DIR__.'/auth.php';

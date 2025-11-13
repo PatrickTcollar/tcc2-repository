@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\Exam;
 use App\Models\Report;
-
+use Illuminate\Support\Facades\Auth; // Importar a facade Auth
 
 class PatientController extends Controller
 {
@@ -16,6 +16,9 @@ class PatientController extends Controller
      */
     public function index()
     {
+        // Se você quiser mostrar apenas pacientes criados pelo usuário logado:
+        // $pacientes = Patient::where('user_id', Auth::id())->get();
+
         $pacientes = Patient::all();
         return view('patients.index', compact('pacientes'));
     }
@@ -33,12 +36,18 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
+        // 1. Validação dos dados (CPF removido)
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
-            'gender'     => 'required|in:M,F', // CORREÇÃO AQUI: Removido 'O'
+            'gender'     => 'required|in:M,F',
+            // O CPF foi removido daqui.
         ]);
 
+        // 2. Adicionar o 'user_id'
+        $validated['user_id'] = Auth::id();
+
+        // 3. Criação do registro
         Patient::create($validated);
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente cadastrado com sucesso!');
@@ -81,10 +90,12 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $paciente)
     {
+        // Validação (CPF removido)
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
-            'gender'     => 'required|in:M,F', // CORREÇÃO AQUI: Removido 'O'
+            'gender'     => 'required|in:M,F',
+            // O CPF foi removido daqui.
         ]);
 
         $paciente->update($validated);

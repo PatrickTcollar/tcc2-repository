@@ -1,50 +1,45 @@
-@extends('layouts.app') {{-- Assume que você tem um layout base 'layouts.app' --}}
+@extends('layouts.app')
 
 @section('content')
 <div class="container mx-auto p-4">
-    {{-- Verifica se o objeto $patient existe e não é nulo --}}
-    @if ($patient)
-        <h2 class="text-3xl font-semibold text-gray-800 mb-6">Detalhes do Paciente: {{ $patient->name }}</h2>
+    <!-- Verifica se o objeto $paciente existe e não é nulo -->
+    @if ($paciente)
+        <h2 class="text-3xl font-semibold text-gray-800 mb-6">
+            Detalhes do Paciente: {{ $paciente->name }}
+        </h2>
 
-        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-4">
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">ID:</strong>
-                <p class="text-gray-900 text-lg">{{ $patient->id }}</p>
-            </div>
-            <div class="mb-4">
-                <strong class="block text-gray-600 text-sm font-bold mb-2">Nome:</strong>
-                <p class="text-gray-900 text-lg">{{ $patient->name }}</p>
+                <p class="text-gray-900">{{ $paciente->id }}</p>
             </div>
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">Data de Nascimento:</strong>
-                <p class="text-gray-900 text-lg">{{ \Carbon\Carbon::parse($patient->birth_date)->format('d/m/Y') }}</p>
+                <p class="text-gray-900">{{ \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y') }}</p>
             </div>
             <div class="mb-4">
-                <strong class="block text-gray-600 text-sm font-bold mb-2">Sexo:</strong>
-                <p class="text-gray-900 text-lg">{{ $patient->gender }}</p>
+                <strong class="block text-gray-600 text-sm font-bold mb-2">Gênero:</strong>
+                <p class="text-gray-900">{{ $paciente->gender }}</p>
             </div>
-
-            {{-- Você pode adicionar outros detalhes do paciente aqui, se houver campos adicionais --}}
-
+            <div class="mb-4">
+                <strong class="block text-gray-600 text-sm font-bold mb-2">Criado por (User ID):</strong>
+                <p class="text-gray-900">{{ $paciente->user_id }}</p>
+            </div>
+            <!-- Adicione mais detalhes conforme necessário -->
         </div>
 
-        <div class="flex space-x-4">
-            {{-- Link para editar o paciente (assumindo que você terá um método edit e rota pacientes.edit) --}}
-            <a href="{{ route('pacientes.edit', $patient->id) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md">
+        <div class="mt-6">
+            <!-- Rota corrigida de 'patients.edit' para 'pacientes.edit' -->
+            <a href="{{ route('pacientes.edit', $paciente) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
                 Editar Paciente
             </a>
-            {{-- Link para voltar para a lista de pacientes --}}
-            <a href="{{ route('pacientes.index') }}" class="inline-block bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out shadow-md">
-                Voltar para a lista
+            <a href="{{ route('pacientes.index') }}" class="ml-4 text-gray-600 hover:text-gray-900 transition duration-300">
+                Voltar à Lista
             </a>
         </div>
+
     @else
-        {{-- Mensagem exibida se o paciente não for encontrado (variável $patient é nula) --}}
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <strong class="font-bold">Erro:</strong>
-            <span class="block sm:inline">Paciente não encontrado.</span>
-            <p class="mt-2"><a href="{{ route('pacientes.index') }}" class="text-red-700 hover:underline">Voltar para a lista de pacientes</a></p>
-        </div>
+        <h2 class="text-3xl font-semibold text-red-500">Paciente Não Encontrado</h2>
     @endif
 </div>
 @endsection

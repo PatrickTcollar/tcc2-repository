@@ -60,13 +60,13 @@
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <div class="flex items-center space-x-3">
-                                        <a href="{{ route('pacientes.show', $paciente->id) }}"
+                                        <a href="{{ route('pacientes.show', $paciente) }}"
                                            class="text-blue-600 hover:text-blue-900 transition duration-150 ease-in-out">Ver</a>
                                         <span>|</span>
-                                        <a href="{{ route('pacientes.edit', $paciente->id) }}"
+                                        <a href="{{ route('pacientes.edit', $paciente) }}"
                                            class="text-purple-600 hover:text-purple-900 transition duration-150 ease-in-out">Editar</a>
                                         <span>|</span>
-                                        <form action="{{ route('pacientes.destroy', $paciente->id) }}" method="POST" class="inline-block">
+                                        <form action="{{ route('pacientes.destroy', $paciente) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
