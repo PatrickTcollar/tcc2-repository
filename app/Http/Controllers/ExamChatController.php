@@ -57,8 +57,8 @@ class ExamChatController extends Controller
         $prompt = "Voc\u00ea \u00e9 um assistente especializado em fisioterapia respirat\u00f3ria. O exame de espirometria a seguir foi realizado pelo paciente " . ($exam->patient->name ?? 'desconhecido') . " (ID: " . $exam->patient->id . ").\n\nResultados do Exame:\n" . $examText . "\n\nCom base nestes resultados, por favor, responda \u00e0 seguinte pergunta: " . $userMessage;
 
         // 3. Fazer a Requisi\u00e7\u00e3o para a API do Gemini
-        $apiKey = env('GEMINI_API_KEY');
-        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
+        $apiKey = config('services.gemini.key');
+        $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
         $payload = [
             'contents' => [

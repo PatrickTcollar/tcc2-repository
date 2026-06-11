@@ -16,10 +16,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        // Se você quiser mostrar apenas pacientes criados pelo usuário logado:
-        // $pacientes = Patient::where('user_id', Auth::id())->get();
-
-        $pacientes = Patient::all();
+        $pacientes = Patient::where('user_id', Auth::id())->get();
         return view('patients.index', compact('pacientes'));
     }
 
@@ -41,10 +38,10 @@ class PatientController extends Controller
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
             'gender'     => 'required|in:M,F',
-            // O CPF foi removido daqui.
+            'smoker'     => 'nullable|boolean',
         ]);
 
-        // 2. Adicionar o 'user_id'
+        $validated['smoker'] = $request->boolean('smoker');
         $validated['user_id'] = Auth::id();
 
         // 3. Criação do registro
@@ -90,13 +87,16 @@ class PatientController extends Controller
      */
     public function update(Request $request, Patient $paciente)
     {
-        // Validação (CPF removido)
+        abort_if($paciente->user_id !== Auth::id(), 403);
+
         $validated = $request->validate([
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
             'gender'     => 'required|in:M,F',
-            // O CPF foi removido daqui.
+            'smoker'     => 'nullable|boolean',
         ]);
+
+        $validated['smoker'] = $request->boolean('smoker');
 
         $paciente->update($validated);
 
@@ -111,6 +111,8 @@ class PatientController extends Controller
      */
     public function destroy(Patient $paciente)
     {
+        abort_if($paciente->user_id !== Auth::id(), 403);
+
         $paciente->delete();
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente excluído com sucesso!');

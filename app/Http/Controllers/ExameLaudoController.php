@@ -77,8 +77,7 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
             // *** FIM DO PROMPT APRIMORADO ***
 
             // 3. Fazer a Requisição para a API do Gemini
-            $apiKey = env('GEMINI_API_KEY');
-            // Modelo Gemini 2.5 Flash
+            $apiKey = config('services.gemini.key');
             $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
             $payload = [
@@ -91,6 +90,13 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
                     ]
                 ],
             ];
+
+            // ** ADICIONE O LOG AQUI (Entre as linhas 93 e 95) **
+            \Log::info('--- Debug Chamada API Gemini ---', [
+                'api_key_presente' => !empty($apiKey),
+                 'api_url_gerada'   => $apiUrl,
+                'payload_enviado'  => $payload
+            ]);
 
             // Realiza a requisição HTTP POST.
             $aiResponse = Http::timeout(60)->withoutVerifying()->post($apiUrl, $payload)->json();
@@ -132,5 +138,11 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
     public function showReport(Report $report)
     {
         return view('reports.show', compact('report'));
+    }
+
+    public function destroy(Report $report)
+    {
+        $report->delete();
+        return redirect()->route('laudos.index')->with('success', 'Laudo excluído com sucesso.');
     }
 }

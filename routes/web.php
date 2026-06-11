@@ -9,6 +9,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\EvolutionController;
 use App\Http\Controllers\ExamChatController;
 use App\Http\Controllers\ChatModuleController;
+use App\Http\Controllers\ClinicController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ Route::middleware('auth')->group(function () {
     // Rotas para Exames (listagem e visualização)
     Route::get('/exames', [ExamController::class, 'index'])->name('exames.index');
     Route::get('/exames/{exam}', [ExamController::class, 'show'])->name('exames.show');
+    Route::delete('/exames/{exam}', [ExamController::class, 'destroy'])->name('exames.destroy');
 
     // Rota para Gerar Laudo Automatizado
     Route::post('/exames/{exam}/gerar-laudo', [ExameLaudoController::class, 'gerarLaudoAutomotizado'])->name('exams.generate_report');
@@ -47,6 +49,7 @@ Route::middleware('auth')->group(function () {
     // Rotas para Laudos
     Route::get('/laudos', [ExameLaudoController::class, 'index'])->name('laudos.index');
     Route::get('/laudos/{report}', [ExameLaudoController::class, 'showReport'])->name('reports.show');
+    Route::delete('/laudos/{report}', [ExameLaudoController::class, 'destroy'])->name('laudos.destroy');
 
     // Rotas para Evolução do Paciente
     // CORRIGIDO: Rota GET para exibir o formulário de seleção (index)
@@ -57,12 +60,15 @@ Route::middleware('auth')->group(function () {
     // Rota para a interface de chat do exame (destino do redirecionamento)
     Route::get('/exames/{exam}/chat', [ExamChatController::class, 'showChatInterface'])->name('exames.chat');
 
-    // **** NOVAS ROTAS PARA O MÓDULO DE CHAT ESPECÍFICO ****
+    // Rotas para Clínica
+    Route::resource('clinics', ClinicController::class);
+
+    // Rotas para o Módulo de Chat
     Route::get('/chat/upload', [ChatModuleController::class, 'showUploadFormForChat'])->name('chat.upload.form');
     Route::post('/chat/upload', [ChatModuleController::class, 'handleUploadAndRedirectToChat'])->name('chat.upload.handle');
-});
 
-// Rota de API para chat (para requisições AJAX do React)
-Route::post('/api/exames/{exam}/chat', [ExamChatController::class, 'handleChatMessage'])->name('api.exames.chat');
+    // Rota de API para chat (AJAX do React) — protegida por auth
+    Route::post('/api/exames/{exam}/chat', [ExamChatController::class, 'handleChatMessage'])->name('api.exames.chat');
+});
 
 require __DIR__.'/auth.php';
