@@ -37,6 +37,9 @@
                                 Sexo
                             </th>
                             <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Fumante
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 Ações
                             </th>
                         </tr>
@@ -52,11 +55,16 @@
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ $paciente->birth_date ? \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y') : 'N/A' }}
+                                        {{ $paciente->birth_date ? \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y H:i') : 'N/A' }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
-                                    <p class="text-gray-900 whitespace-no-wrap">{{ $paciente->gender }}</p>
+                                    <p class="text-gray-900 whitespace-no-wrap">{{ $paciente->gender == 'M' ? 'Masculino' : 'Feminino' }}</p>
+                                </td>
+                                <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
+                                    <span class="{{ $paciente->smoker ? 'text-red-600 font-semibold' : 'text-gray-600' }}">
+                                        {{ $paciente->smoker ? 'Sim' : 'Não' }}
+                                    </span>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <div class="flex items-center space-x-3">

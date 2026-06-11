@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom/client';
 import { Send, FileText, Bot, User, Loader2, Save } from 'lucide-react';
 // Acessamos jsPDF a partir do objeto global 'window.jspdf' carregado via CDN no Blade.
 // N\u00e3o h\u00e1 necessidade de um 'import' direto aqui que causaria erro de resolu\u00e7\u00e3o com Vite.

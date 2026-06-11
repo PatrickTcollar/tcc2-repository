@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - heading "Editar Paciente" [level=2] [ref=e26]
+      - paragraph [ref=e27]: Atualize as informações do paciente.
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: "Nome do paciente:"
+          - textbox "Nome do paciente:" [ref=e32]: João Silva Teste
+        - generic [ref=e33]:
+          - generic [ref=e34]: "Data de nascimento:"
+          - textbox "Data de nascimento:" [ref=e35]: 1985-03-15
+        - generic [ref=e36]:
+          - generic [ref=e37]: "Sexo:"
+          - combobox "Sexo:" [ref=e38]:
+            - option "Selecione"
+            - option "Masculino" [selected]
+            - option "Feminino"
+        - generic [ref=e39]:
+          - button " Atualizar Paciente" [ref=e40] [cursor=pointer]:
+            - generic [ref=e41]: 
+            - text: Atualizar Paciente
+          - link " Cancelar" [ref=e42] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+            - generic [ref=e43]: 
+            - text: Cancelar

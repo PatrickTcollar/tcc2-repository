@@ -1,0 +1,48 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - heading "Iniciar Chat sobre Exame" [level=2] [ref=e26]
+      - paragraph [ref=e27]: Fa\u00e7a o upload de um exame para iniciar uma conversa em tempo real com a IA.
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: "Selecione o Paciente:"
+          - combobox "Selecione o Paciente:" [ref=e32]:
+            - option "-- Selecione um Paciente --" [selected]
+            - 'option "CASO NORMAL (ID: 4)"'
+            - 'option "CASO OBSTRUTIVO (ID: 5)"'
+            - 'option "CASO RESTRITIVO (ID: 6)"'
+            - 'option "JOÃO DA SILVA (ID: 8)"'
+            - 'option "TESTE1 (ID: 10)"'
+            - 'option "João Silva Teste (ID: 11)"'
+        - generic [ref=e33]:
+          - generic [ref=e34]: "Arquivo do Exame (PDF):"
+          - button "Arquivo do Exame (PDF):" [ref=e35] [cursor=pointer]
+          - paragraph [ref=e36]: Apenas arquivos PDF s\u00e3o permitidos (m\u00e1x. 10MB).
+        - generic [ref=e37]:
+          - button " Iniciar Chat" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39]: 
+            - text: Iniciar Chat
+          - link " Voltar" [ref=e40] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+            - generic [ref=e41]: 
+            - text: Voltar

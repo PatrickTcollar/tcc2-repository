@@ -1,0 +1,153 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - alert [ref=e26]:
+      - strong [ref=e27]: Sucesso!
+      - text: Paciente cadastrado com sucesso!
+    - generic [ref=e28]:
+      - heading "Lista de Pacientes" [level=2] [ref=e29]
+      - paragraph [ref=e30]: Gerencie todos os pacientes cadastrados no sistema.
+      - link " Novo Paciente" [ref=e32] [cursor=pointer]:
+        - /url: http://localhost:8000/pacientes/create
+        - generic [ref=e33]: 
+        - text: Novo Paciente
+      - table [ref=e35]:
+        - rowgroup [ref=e36]:
+          - row "ID Nome Data de Nascimento Sexo Ações" [ref=e37]:
+            - columnheader "ID" [ref=e38]
+            - columnheader "Nome" [ref=e39]
+            - columnheader "Data de Nascimento" [ref=e40]
+            - columnheader "Sexo" [ref=e41]
+            - columnheader "Ações" [ref=e42]
+        - rowgroup [ref=e43]:
+          - row "4 CASO NORMAL 12/03/2000 M Ver | Editar | Excluir" [ref=e44]:
+            - cell "4" [ref=e45]:
+              - paragraph [ref=e46]: "4"
+            - cell "CASO NORMAL" [ref=e47]:
+              - paragraph [ref=e48]: CASO NORMAL
+            - cell "12/03/2000" [ref=e49]:
+              - paragraph [ref=e50]: 12/03/2000
+            - cell "M" [ref=e51]:
+              - paragraph [ref=e52]: M
+            - cell "Ver | Editar | Excluir" [ref=e53]:
+              - generic [ref=e54]:
+                - link "Ver" [ref=e55] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/4
+                - generic [ref=e56]: "|"
+                - link "Editar" [ref=e57] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/4/edit
+                - generic [ref=e58]: "|"
+                - button "Excluir" [ref=e60] [cursor=pointer]
+          - row "5 CASO OBSTRUTIVO 12/03/2000 F Ver | Editar | Excluir" [ref=e61]:
+            - cell "5" [ref=e62]:
+              - paragraph [ref=e63]: "5"
+            - cell "CASO OBSTRUTIVO" [ref=e64]:
+              - paragraph [ref=e65]: CASO OBSTRUTIVO
+            - cell "12/03/2000" [ref=e66]:
+              - paragraph [ref=e67]: 12/03/2000
+            - cell "F" [ref=e68]:
+              - paragraph [ref=e69]: F
+            - cell "Ver | Editar | Excluir" [ref=e70]:
+              - generic [ref=e71]:
+                - link "Ver" [ref=e72] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/5
+                - generic [ref=e73]: "|"
+                - link "Editar" [ref=e74] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/5/edit
+                - generic [ref=e75]: "|"
+                - button "Excluir" [ref=e77] [cursor=pointer]
+          - row "6 CASO RESTRITIVO 12/03/2000 M Ver | Editar | Excluir" [ref=e78]:
+            - cell "6" [ref=e79]:
+              - paragraph [ref=e80]: "6"
+            - cell "CASO RESTRITIVO" [ref=e81]:
+              - paragraph [ref=e82]: CASO RESTRITIVO
+            - cell "12/03/2000" [ref=e83]:
+              - paragraph [ref=e84]: 12/03/2000
+            - cell "M" [ref=e85]:
+              - paragraph [ref=e86]: M
+            - cell "Ver | Editar | Excluir" [ref=e87]:
+              - generic [ref=e88]:
+                - link "Ver" [ref=e89] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/6
+                - generic [ref=e90]: "|"
+                - link "Editar" [ref=e91] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/6/edit
+                - generic [ref=e92]: "|"
+                - button "Excluir" [ref=e94] [cursor=pointer]
+          - row "8 JOÃO DA SILVA 31/12/1995 M Ver | Editar | Excluir" [ref=e95]:
+            - cell "8" [ref=e96]:
+              - paragraph [ref=e97]: "8"
+            - cell "JOÃO DA SILVA" [ref=e98]:
+              - paragraph [ref=e99]: JOÃO DA SILVA
+            - cell "31/12/1995" [ref=e100]:
+              - paragraph [ref=e101]: 31/12/1995
+            - cell "M" [ref=e102]:
+              - paragraph [ref=e103]: M
+            - cell "Ver | Editar | Excluir" [ref=e104]:
+              - generic [ref=e105]:
+                - link "Ver" [ref=e106] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/8
+                - generic [ref=e107]: "|"
+                - link "Editar" [ref=e108] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/8/edit
+                - generic [ref=e109]: "|"
+                - button "Excluir" [ref=e111] [cursor=pointer]
+          - row "10 TESTE1 01/10/2025 M Ver | Editar | Excluir" [ref=e112]:
+            - cell "10" [ref=e113]:
+              - paragraph [ref=e114]: "10"
+            - cell "TESTE1" [ref=e115]:
+              - paragraph [ref=e116]: TESTE1
+            - cell "01/10/2025" [ref=e117]:
+              - paragraph [ref=e118]: 01/10/2025
+            - cell "M" [ref=e119]:
+              - paragraph [ref=e120]: M
+            - cell "Ver | Editar | Excluir" [ref=e121]:
+              - generic [ref=e122]:
+                - link "Ver" [ref=e123] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/10
+                - generic [ref=e124]: "|"
+                - link "Editar" [ref=e125] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/10/edit
+                - generic [ref=e126]: "|"
+                - button "Excluir" [ref=e128] [cursor=pointer]
+          - row "11 João Silva Teste 15/03/1985 M Ver | Editar | Excluir" [ref=e129]:
+            - cell "11" [ref=e130]:
+              - paragraph [ref=e131]: "11"
+            - cell "João Silva Teste" [ref=e132]:
+              - paragraph [ref=e133]: João Silva Teste
+            - cell "15/03/1985" [ref=e134]:
+              - paragraph [ref=e135]: 15/03/1985
+            - cell "M" [ref=e136]:
+              - paragraph [ref=e137]: M
+            - cell "Ver | Editar | Excluir" [ref=e138]:
+              - generic [ref=e139]:
+                - link "Ver" [ref=e140] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/11
+                - generic [ref=e141]: "|"
+                - link "Editar" [ref=e142] [cursor=pointer]:
+                  - /url: http://localhost:8000/pacientes/11/edit
+                - generic [ref=e143]: "|"
+                - button "Excluir" [ref=e145] [cursor=pointer]
+      - link " Voltar ao Painel" [ref=e147] [cursor=pointer]:
+        - /url: http://localhost:8000/dashboard
+        - generic [ref=e148]: 
+        - text: Voltar ao Painel

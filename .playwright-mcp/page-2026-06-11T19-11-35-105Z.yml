@@ -1,0 +1,40 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - heading "Upload de Exame de Espirometria" [level=2] [ref=e26]
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - generic [ref=e29]: "Selecione o Paciente:"
+          - combobox "Selecione o Paciente:" [ref=e30]:
+            - option "-- Selecione um Paciente --" [selected]
+            - 'option "CASO NORMAL (ID: 4)"'
+            - 'option "CASO OBSTRUTIVO (ID: 5)"'
+            - 'option "CASO RESTRITIVO (ID: 6)"'
+            - 'option "JOÃO DA SILVA (ID: 8)"'
+            - 'option "TESTE1 (ID: 10)"'
+            - 'option "João Silva Teste (ID: 11)"'
+        - generic [ref=e31]:
+          - generic [ref=e32]: "Arquivo do Exame (PDF):"
+          - button "Arquivo do Exame (PDF):" [ref=e33] [cursor=pointer]
+          - paragraph [ref=e34]: Apenas arquivos PDF são permitidos (máx. 10MB).
+        - button "Realizar Upload" [ref=e36] [cursor=pointer]

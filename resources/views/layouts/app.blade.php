@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulmoEspir - Sistema Fisioterapeuta</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Sistema de Laudos - Fisioterapia Respiratória</title>
 
     {{-- Link para Font Awesome para ícones --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" xintegrity="sha512-1ycn6IcaQQ40jHzl+tWTfLyhE6ZkP2D2zG1tbbqUmyD/F8rS9zN5T5h5e5L5S5x5S5p5O5e5L5S5x5S5S5p5O5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- Scripts do Vite para Tailwind CSS e JavaScript da aplicação --}}
-    @vite(['resources/css/app.css', 'resources/js/App.jsx'])
+    @vite(['resources/css/app.css'])
 </head>
 <body>
     {{-- A navegação superior ou lateral, se você tiver uma --}}

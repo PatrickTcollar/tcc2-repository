@@ -1,0 +1,158 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - generic [ref=e25]:
+      - heading "Lista de Laudos" [level=2] [ref=e26]
+      - paragraph [ref=e27]: Visualize todos os laudos gerados pelo sistema.
+      - table [ref=e29]:
+        - rowgroup [ref=e30]:
+          - row "ID ID do Exame Nome do Paciente Data de Geração Ações" [ref=e31]:
+            - columnheader "ID" [ref=e32]
+            - columnheader "ID do Exame" [ref=e33]
+            - columnheader "Nome do Paciente" [ref=e34]
+            - columnheader "Data de Geração" [ref=e35]
+            - columnheader "Ações" [ref=e36]
+        - rowgroup [ref=e37]:
+          - row "1 2 CASO NORMAL 12/10/2025 00:00 Ver Detalhes" [ref=e38]:
+            - cell "1" [ref=e39]:
+              - paragraph [ref=e40]: "1"
+            - cell "2" [ref=e41]:
+              - paragraph [ref=e42]: "2"
+            - cell "CASO NORMAL" [ref=e43]:
+              - paragraph [ref=e44]: CASO NORMAL
+            - cell "12/10/2025 00:00" [ref=e45]:
+              - paragraph [ref=e46]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e47]:
+              - link "Ver Detalhes" [ref=e48] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/1
+          - row "2 3 CASO OBSTRUTIVO 12/10/2025 00:00 Ver Detalhes" [ref=e49]:
+            - cell "2" [ref=e50]:
+              - paragraph [ref=e51]: "2"
+            - cell "3" [ref=e52]:
+              - paragraph [ref=e53]: "3"
+            - cell "CASO OBSTRUTIVO" [ref=e54]:
+              - paragraph [ref=e55]: CASO OBSTRUTIVO
+            - cell "12/10/2025 00:00" [ref=e56]:
+              - paragraph [ref=e57]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e58]:
+              - link "Ver Detalhes" [ref=e59] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/2
+          - row "3 4 CASO RESTRITIVO 12/10/2025 00:00 Ver Detalhes" [ref=e60]:
+            - cell "3" [ref=e61]:
+              - paragraph [ref=e62]: "3"
+            - cell "4" [ref=e63]:
+              - paragraph [ref=e64]: "4"
+            - cell "CASO RESTRITIVO" [ref=e65]:
+              - paragraph [ref=e66]: CASO RESTRITIVO
+            - cell "12/10/2025 00:00" [ref=e67]:
+              - paragraph [ref=e68]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e69]:
+              - link "Ver Detalhes" [ref=e70] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/3
+          - row "6 Paciente não encontrado 12/10/2025 00:00 Ver Detalhes" [ref=e71]:
+            - cell "6" [ref=e72]:
+              - paragraph [ref=e73]: "6"
+            - cell [ref=e74]:
+              - paragraph
+            - cell "Paciente não encontrado" [ref=e75]:
+              - paragraph [ref=e76]: Paciente não encontrado
+            - cell "12/10/2025 00:00" [ref=e77]:
+              - paragraph [ref=e78]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e79]:
+              - link "Ver Detalhes" [ref=e80] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/6
+          - row "7 Paciente não encontrado 12/10/2025 00:00 Ver Detalhes" [ref=e81]:
+            - cell "7" [ref=e82]:
+              - paragraph [ref=e83]: "7"
+            - cell [ref=e84]:
+              - paragraph
+            - cell "Paciente não encontrado" [ref=e85]:
+              - paragraph [ref=e86]: Paciente não encontrado
+            - cell "12/10/2025 00:00" [ref=e87]:
+              - paragraph [ref=e88]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e89]:
+              - link "Ver Detalhes" [ref=e90] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/7
+          - row "8 Paciente não encontrado 12/10/2025 00:00 Ver Detalhes" [ref=e91]:
+            - cell "8" [ref=e92]:
+              - paragraph [ref=e93]: "8"
+            - cell [ref=e94]:
+              - paragraph
+            - cell "Paciente não encontrado" [ref=e95]:
+              - paragraph [ref=e96]: Paciente não encontrado
+            - cell "12/10/2025 00:00" [ref=e97]:
+              - paragraph [ref=e98]: 12/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e99]:
+              - link "Ver Detalhes" [ref=e100] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/8
+          - row "9 13 TESTE1 16/10/2025 00:00 Ver Detalhes" [ref=e101]:
+            - cell "9" [ref=e102]:
+              - paragraph [ref=e103]: "9"
+            - cell "13" [ref=e104]:
+              - paragraph [ref=e105]: "13"
+            - cell "TESTE1" [ref=e106]:
+              - paragraph [ref=e107]: TESTE1
+            - cell "16/10/2025 00:00" [ref=e108]:
+              - paragraph [ref=e109]: 16/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e110]:
+              - link "Ver Detalhes" [ref=e111] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/9
+          - row "10 Paciente não encontrado 16/10/2025 00:00 Ver Detalhes" [ref=e112]:
+            - cell "10" [ref=e113]:
+              - paragraph [ref=e114]: "10"
+            - cell [ref=e115]:
+              - paragraph
+            - cell "Paciente não encontrado" [ref=e116]:
+              - paragraph [ref=e117]: Paciente não encontrado
+            - cell "16/10/2025 00:00" [ref=e118]:
+              - paragraph [ref=e119]: 16/10/2025 00:00
+            - cell "Ver Detalhes" [ref=e120]:
+              - link "Ver Detalhes" [ref=e121] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/10
+          - row "11 12 CASO NORMAL 11/06/2026 00:00 Ver Detalhes" [ref=e122]:
+            - cell "11" [ref=e123]:
+              - paragraph [ref=e124]: "11"
+            - cell "12" [ref=e125]:
+              - paragraph [ref=e126]: "12"
+            - cell "CASO NORMAL" [ref=e127]:
+              - paragraph [ref=e128]: CASO NORMAL
+            - cell "11/06/2026 00:00" [ref=e129]:
+              - paragraph [ref=e130]: 11/06/2026 00:00
+            - cell "Ver Detalhes" [ref=e131]:
+              - link "Ver Detalhes" [ref=e132] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/11
+          - row "12 14 CASO NORMAL 11/06/2026 00:00 Ver Detalhes" [ref=e133]:
+            - cell "12" [ref=e134]:
+              - paragraph [ref=e135]: "12"
+            - cell "14" [ref=e136]:
+              - paragraph [ref=e137]: "14"
+            - cell "CASO NORMAL" [ref=e138]:
+              - paragraph [ref=e139]: CASO NORMAL
+            - cell "11/06/2026 00:00" [ref=e140]:
+              - paragraph [ref=e141]: 11/06/2026 00:00
+            - cell "Ver Detalhes" [ref=e142]:
+              - link "Ver Detalhes" [ref=e143] [cursor=pointer]:
+                - /url: http://localhost:8000/laudos/12
+      - link " Voltar ao Painel" [ref=e145] [cursor=pointer]:
+        - /url: http://localhost:8000/dashboard
+        - generic [ref=e146]: 
+        - text: Voltar ao Painel

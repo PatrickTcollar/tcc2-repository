@@ -29,41 +29,88 @@
                     <x-nav-link :href="route('evolucao.index')" :active="request()->routeIs('evolucao.index') || request()->routeIs('evolucao.analyze')">
                         Evolução
                     </x-nav-link>
+                    @auth
+                    <x-nav-link :href="auth()->user()->clinic ? route('clinics.show', auth()->user()->clinic) : route('clinics.create')" :active="request()->routeIs('clinics.*')">
+                        Clínica
+                    </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+            <div class="hidden sm:flex sm:items-center sm:ms-6 relative" id="user-menu-wrapper">
+                <button onclick="document.getElementById('user-dropdown').classList.toggle('hidden')"
+                        class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-indigo-600 text-white text-xs font-bold select-none">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->name, ' '), 1, 1)) }}
+                    </span>
+                    <div class="text-left">
+                        <div class="text-sm font-semibold text-gray-700">{{ Auth::user()->name }}</div>
+                        @if(Auth::user()->clinic)
+                            <div class="text-xs text-gray-400">{{ Auth::user()->clinic->name }}</div>
+                        @endif
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                <div id="user-dropdown"
+                     class="hidden absolute right-0 top-full mt-1 w-64 bg-white rounded-md shadow-lg border border-gray-200 z-50">
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                    {{-- Cabeçalho --}}
+                    <div class="px-4 py-3 border-b border-gray-100">
+                        <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        @if(Auth::user()->clinic)
+                            <p class="text-xs text-indigo-600 font-medium mt-1">
+                                <i class="fas fa-hospital mr-1"></i>{{ Auth::user()->clinic->name }}
+                            </p>
+                        @else
+                            <p class="text-xs text-amber-500 mt-1">
+                                <i class="fas fa-exclamation-circle mr-1"></i>Sem clínica vinculada
+                            </p>
+                        @endif
+                    </div>
 
-                        <!-- Authentication -->
+                    {{-- Botão Sair --}}
+                    <div class="px-4 py-2 border-b border-gray-100">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            <button type="submit"
+                                class="flex items-center gap-1 px-3 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition duration-150">
+                                <i class="fas fa-sign-out-alt"></i> Sair
+                            </button>
                         </form>
-                    </x-slot>
-                </x-dropdown>
+                    </div>
+
+                    {{-- Links --}}
+                    <a href="{{ route('profile.edit') }}"
+                       class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                        <i class="fas fa-user text-gray-400"></i> Meu Perfil
+                    </a>
+                    @if(Auth::user()->clinic)
+                        <a href="{{ route('clinics.show', Auth::user()->clinic) }}"
+                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                            <i class="fas fa-hospital text-gray-400"></i> Minha Clínica
+                        </a>
+                    @else
+                        <a href="{{ route('clinics.create') }}"
+                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                            <i class="fas fa-plus-circle text-gray-400"></i> Cadastrar Clínica
+                        </a>
+                    @endif
+                </div>
+
+                <script>
+                    document.addEventListener('click', function(e) {
+                        var wrapper = document.getElementById('user-menu-wrapper');
+                        var dropdown = document.getElementById('user-dropdown');
+                        if (wrapper && !wrapper.contains(e.target)) {
+                            dropdown.classList.add('hidden');
+                        }
+                    });
+                </script>
             </div>
 
             <!-- Hamburger -->
@@ -102,24 +149,30 @@
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+            <div class="px-4 flex items-center gap-3">
+                <span class="inline-flex items-center justify-center h-9 w-9 rounded-full bg-indigo-600 text-white text-sm font-bold select-none">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->name, ' '), 1, 1)) }}
+                </span>
+                <div>
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    @if(Auth::user()->clinic)
+                        <div class="text-xs text-indigo-600 font-medium">{{ Auth::user()->clinic->name }}</div>
+                    @endif
+                </div>
             </div>
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    <i class="fas fa-user mr-2"></i> Meu Perfil
                 </x-responsive-nav-link>
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                            onclick="event.preventDefault(); this.closest('form').submit();"
+                            class="text-red-600">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Sair
                     </x-responsive-nav-link>
                 </form>
             </div>

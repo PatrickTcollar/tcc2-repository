@@ -1,0 +1,37 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+          - link "Clínica" [ref=e16] [cursor=pointer]:
+            - /url: http://localhost:8000/clinics/2
+      - button "Patrick Tarouco" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: Patrick Tarouco
+        - img [ref=e23]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - heading "Lista de Pacientes" [level=2] [ref=e27]
+      - paragraph [ref=e28]: Gerencie todos os pacientes cadastrados no sistema.
+      - link " Novo Paciente" [ref=e30] [cursor=pointer]:
+        - /url: http://localhost:8000/pacientes/create
+        - generic [ref=e31]: 
+        - text: Novo Paciente
+      - alert [ref=e32]:
+        - paragraph [ref=e33]: Nenhum paciente cadastrado ainda.
+      - link " Voltar ao Painel" [ref=e35] [cursor=pointer]:
+        - /url: http://localhost:8000/dashboard
+        - generic [ref=e36]: 
+        - text: Voltar ao Painel

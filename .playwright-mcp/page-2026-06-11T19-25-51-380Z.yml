@@ -1,0 +1,45 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+      - button "Patrick Tarouco Collar" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: Patrick Tarouco Collar
+        - img [ref=e22]
+  - main [ref=e24]:
+    - generic [ref=e27]:
+      - generic [ref=e28]:
+        - 'heading "Chat sobre o Exame #14" [level=1] [ref=e29]':
+          - img [ref=e30]
+          - text: "Chat sobre o Exame #14"
+        - button "Salvar PDF" [ref=e33] [cursor=pointer]:
+          - img [ref=e34]
+          - text: Salvar PDF
+      - main [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e41]:
+            - img [ref=e43]
+            - paragraph [ref=e46]: Olá! Eu sou seu assistente de IA. Estou aqui para conversar sobre o exame exame_puro_EX-2026-005.pdf. Como posso ajudar?
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - paragraph [ref=e59]: Quais são os principais valores de VEF1 e CVF deste exame?
+          - generic [ref=e61]:
+            - img [ref=e63]
+            - paragraph [ref=e66]: "Desculpe, houve um erro ao processar sua solicitação: Cannot read properties of null (reading 'getAttribute')"
+      - generic [ref=e47]:
+        - textbox "Digite sua mensagem..." [ref=e48]
+        - button [disabled] [ref=e49]:
+          - img [ref=e50]

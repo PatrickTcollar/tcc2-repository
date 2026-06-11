@@ -1,0 +1,48 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+          - link "Clínica" [ref=e16] [cursor=pointer]:
+            - /url: http://localhost:8000/clinics/create
+      - button "Patrick Tarouco" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: Patrick Tarouco
+        - img [ref=e23]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - heading "Cadastrar Novo Paciente" [level=2] [ref=e27]
+      - paragraph [ref=e28]: Preencha os dados abaixo para registrar um novo paciente no sistema.
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: "Nome do paciente:"
+          - textbox "Nome do paciente:" [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]: "Data de nascimento:"
+          - textbox "Data de nascimento:" [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e38]: "Sexo:"
+          - combobox "Sexo:" [ref=e39]:
+            - option "-- Selecione --" [selected]
+            - option "Masculino"
+            - option "Feminino"
+        - generic [ref=e40]:
+          - button " Salvar Paciente" [ref=e41] [cursor=pointer]:
+            - generic [ref=e42]: 
+            - text: Salvar Paciente
+          - link " Voltar" [ref=e43] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+            - generic [ref=e44]: 
+            - text: Voltar

@@ -1,0 +1,48 @@
+- generic [ref=e2]:
+  - link [ref=e4] [cursor=pointer]:
+    - /url: /
+    - img [ref=e5]
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]: Nome completo
+      - textbox "Nome completo" [active] [ref=e11]
+    - generic [ref=e12]:
+      - generic [ref=e13]: E-mail
+      - textbox "E-mail" [ref=e14]
+    - generic [ref=e15]:
+      - generic [ref=e16]: Senha
+      - textbox "Senha" [ref=e17]
+    - generic [ref=e18]:
+      - generic [ref=e19]: Confirmar senha
+      - textbox "Confirmar senha" [ref=e20]
+    - generic [ref=e21]:
+      - paragraph [ref=e22]: Clínica
+      - generic [ref=e23]:
+        - generic [ref=e24] [cursor=pointer]:
+          - radio "Entrar em clínica existente" [disabled] [ref=e25]
+          - generic [ref=e26]: Entrar em clínica existente
+        - generic [ref=e27] [cursor=pointer]:
+          - radio "Criar nova clínica" [checked] [ref=e28]
+          - generic [ref=e29]: Criar nova clínica
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: Nome da clínica *
+          - textbox "Nome da clínica *" [ref=e33]
+        - generic [ref=e34]:
+          - generic [ref=e35]: CNPJ
+          - textbox "CNPJ" [ref=e36]:
+            - /placeholder: 00.000.000/0000-00
+        - generic [ref=e37]:
+          - generic [ref=e38]: E-mail da clínica
+          - textbox "E-mail da clínica" [ref=e39]
+        - generic [ref=e40]:
+          - generic [ref=e41]: Telefone
+          - textbox "Telefone" [ref=e42]:
+            - /placeholder: (00) 00000-0000
+        - generic [ref=e43]:
+          - generic [ref=e44]: Endereço
+          - textbox "Endereço" [ref=e45]
+    - generic [ref=e46]:
+      - link "Já tem conta?" [ref=e47] [cursor=pointer]:
+        - /url: http://localhost:8000/login
+      - button "Cadastrar" [ref=e48] [cursor=pointer]

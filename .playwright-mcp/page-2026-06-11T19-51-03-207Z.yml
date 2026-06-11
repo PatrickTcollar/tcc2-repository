@@ -1,0 +1,52 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+          - link "Clínica" [ref=e16] [cursor=pointer]:
+            - /url: http://localhost:8000/clinics/2
+      - button "Patrick Tarouco" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: Patrick Tarouco
+        - img [ref=e23]
+  - main [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - heading "Clínica PulmoVida" [level=1] [ref=e28]
+        - link "Editar" [ref=e29] [cursor=pointer]:
+          - /url: http://localhost:8000/clinics/2/edit
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - paragraph [ref=e32]: CNPJ
+          - paragraph [ref=e33]: 12.345.678/0001-90
+        - generic [ref=e34]:
+          - paragraph [ref=e35]: E-mail
+          - paragraph [ref=e36]: contato@pulmovida.com.br
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: Telefone
+          - paragraph [ref=e39]: (51) 98765-4321
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: Endereço
+          - paragraph [ref=e42]: Av. Ipiranga, 6681 - Porto Alegre/RS
+      - heading "Profissionais vinculados" [level=2] [ref=e43]
+      - table [ref=e45]:
+        - rowgroup [ref=e46]:
+          - row "Nome E-mail" [ref=e47]:
+            - columnheader "Nome" [ref=e48]
+            - columnheader "E-mail" [ref=e49]
+        - rowgroup [ref=e50]:
+          - row "Patrick Tarouco patrick.tarouco_@hotmail.com" [ref=e51]:
+            - cell "Patrick Tarouco" [ref=e52]
+            - cell "patrick.tarouco_@hotmail.com" [ref=e53]

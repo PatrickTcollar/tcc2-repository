@@ -64,7 +64,7 @@
                 const maxWidth = doc.internal.pageSize.width - 2 * margin;
 
                 doc.setFontSize(18);
-                doc.text('Laudo Automatizado - PulmoEspir', margin, yPos);
+                doc.text('Laudo Automatizado - Fisioterapia Respiratória', margin, yPos);
                 yPos += 10;
 
                 doc.setFontSize(12);

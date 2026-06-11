@@ -1,0 +1,29 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: http://localhost:8000/dashboard
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - link "Dashboard" [ref=e11] [cursor=pointer]:
+            - /url: http://localhost:8000/dashboard
+          - link "Pacientes" [ref=e12] [cursor=pointer]:
+            - /url: http://localhost:8000/pacientes
+          - link "Exames" [ref=e13] [cursor=pointer]:
+            - /url: http://localhost:8000/exames
+          - link "Laudos" [ref=e14] [cursor=pointer]:
+            - /url: http://localhost:8000/laudos
+          - link "Evolução" [ref=e15] [cursor=pointer]:
+            - /url: http://localhost:8000/evolucao
+          - link "Clínica" [ref=e16] [cursor=pointer]:
+            - /url: http://localhost:8000/clinics/create
+      - button "Patrick Tarouco" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: Patrick Tarouco
+        - img [ref=e23]
+  - main [ref=e25]:
+    - generic [ref=e27]:
+      - text: Você ainda não está vinculado a nenhuma clínica.
+      - link "Criar uma clínica" [ref=e28] [cursor=pointer]:
+        - /url: http://localhost:8000/clinics/create
+      - text: .
