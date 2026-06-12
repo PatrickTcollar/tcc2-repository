@@ -91,7 +91,7 @@ class EvolutionController extends Controller
                   "**Atenção:** Se houver menos de dois exames válidos, gere um alerta informando que a evolução é inconclusiva.\n\n" .
                   implode("\n\n---\n\n", $allExamsText); // Adiciona os textos de exame ao final do prompt
 
-        $apiKey = env('GEMINI_API_KEY');
+        $apiKey = config('services.gemini.key');
         // Usando gemini-2.5-flash, o modelo recomendado e mais robusto.
         $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
