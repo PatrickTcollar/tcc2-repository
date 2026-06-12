@@ -73,9 +73,9 @@
                 <i class="fas fa-download mr-2"></i> Baixar Laudo
             </button>
 
-            <a href="{{ route('exames.index') }}"
+            <a href="{{ route('laudos.index') }}"
                class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-base font-medium rounded-md shadow transition">
-                <i class="fas fa-arrow-left mr-2"></i> Voltar para Lista de Exames
+                <i class="fas fa-arrow-left mr-2"></i> Voltar para Lista de Laudos
             </a>
         </div>
     @else
