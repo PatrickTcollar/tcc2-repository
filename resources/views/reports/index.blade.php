@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ $laudo->exam->patient->name ?? 'Paciente não encontrado' }}
+                                        {{ $laudo->patient->name ?? $laudo->exam->patient->name ?? 'Paciente não encontrado' }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
