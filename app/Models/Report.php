@@ -12,13 +12,18 @@ class Report extends Model
 
     protected $fillable = [
         'exam_id',
-        'patient_id', // Certifique-se de que este campo exista na sua tabela e está aqui
+        'patient_id',
         'report_content',
         'generation_date',
+        'signed_by',
+        'signer_crf',
+        'signed_at',
+        'signature_image',
     ];
 
     protected $casts = [
         'generation_date' => 'datetime',
+        'signed_at' => 'datetime',
     ];
 
     /**

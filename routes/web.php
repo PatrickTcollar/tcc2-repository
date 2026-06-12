@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/laudos', [ExameLaudoController::class, 'index'])->name('laudos.index');
     Route::get('/laudos/{report}', [ExameLaudoController::class, 'showReport'])->name('reports.show');
     Route::delete('/laudos/{report}', [ExameLaudoController::class, 'destroy'])->name('laudos.destroy');
+    Route::post('/laudos/{report}/assinar', [ExameLaudoController::class, 'sign'])->name('laudos.sign');
 
     // Rotas para Evolução do Paciente
     // CORRIGIDO: Rota GET para exibir o formulário de seleção (index)

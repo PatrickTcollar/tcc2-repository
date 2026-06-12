@@ -145,4 +145,26 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
         $report->delete();
         return redirect()->route('laudos.index')->with('success', 'Laudo excluído com sucesso.');
     }
+
+    public function sign(Request $request, Report $report)
+    {
+        $request->validate([
+            'signed_by'       => 'required|string|max:255',
+            'signer_crf'      => 'required|string|max:50',
+            'signature_image' => 'required|string',
+        ]);
+
+        if ($report->signed_at) {
+            return back()->with('error', 'Este laudo já foi assinado.');
+        }
+
+        $report->update([
+            'signed_by'       => $request->signed_by,
+            'signer_crf'      => $request->signer_crf,
+            'signed_at'       => now(),
+            'signature_image' => $request->signature_image,
+        ]);
+
+        return back()->with('success', 'Laudo assinado com sucesso por ' . $request->signed_by . '.');
+    }
 }
