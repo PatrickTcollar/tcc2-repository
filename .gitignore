@@ -30,3 +30,8 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+test-pdfs/
+test-screenshots/
+Plano_de_Testes_*.docx
+scripts/
+.playwright-mcp/
