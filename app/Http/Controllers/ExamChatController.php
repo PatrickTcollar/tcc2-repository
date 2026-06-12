@@ -53,8 +53,21 @@ class ExamChatController extends Controller
         }
 
         // 2. Construir o Prompt para a Intelig\u00eancia Artificial (Gemini)
-        // O prompt agora inclui o texto do exame e a pergunta do usu\u00e1rio.
-        $prompt = "Voc\u00ea \u00e9 um assistente especializado em fisioterapia respirat\u00f3ria. O exame de espirometria a seguir foi realizado pelo paciente " . ($exam->patient->name ?? 'desconhecido') . " (ID: " . $exam->patient->id . ").\n\nResultados do Exame:\n" . $examText . "\n\nCom base nestes resultados, por favor, responda \u00e0 seguinte pergunta: " . $userMessage;
+        $prompt = "Voc\u00ea \u00e9 um especialista em pneumologia e fisioterapia respirat\u00f3ria com amplo conhecimento em interpreta\u00e7\u00e3o de espirometria. " .
+                  "Seu papel \u00e9 auxiliar profissionais de sa\u00fade a entender os resultados do exame de forma clara, precisa e clinicamente fundamentada.\n\n" .
+                  "**Diretrizes para suas respostas:**\n" .
+                  "- Sempre responda de forma completa, sem truncar frases ou racioc\u00ednios\n" .
+                  "- Use terminologia cl\u00ednica adequada, mas explique os termos quando necess\u00e1rio\n" .
+                  "- Baseie suas respostas estritamente nos dados do exame fornecido\n" .
+                  "- Quando relevante, cite os valores num\u00e9ricos do exame para embasar sua an\u00e1lise\n" .
+                  "- Se a pergunta envolver conduta cl\u00ednica, lembre que a decis\u00e3o final \u00e9 do profissional de sa\u00fade\n" .
+                  "- Responda sempre em portugu\u00eas do Brasil\n\n" .
+                  "**Dados do Paciente:**\n" .
+                  "Nome: " . ($exam->patient->name ?? 'N\u00e3o informado') . "\n" .
+                  "ID do Exame: " . $exam->id . "\n\n" .
+                  "**Resultados do Exame de Espirometria:**\n" . $examText . "\n\n" .
+                  "**Pergunta do profissional:** " . $userMessage . "\n\n" .
+                  "Responda de forma completa e detalhada:";
 
         // 3. Fazer a Requisi\u00e7\u00e3o para a API do Gemini
         $apiKey = config('services.gemini.key');
@@ -70,8 +83,8 @@ class ExamChatController extends Controller
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.7,
-                'maxOutputTokens' => 1000,
+                'temperature' => 0.4,
+                'maxOutputTokens' => 8192,
             ]
         ];
 

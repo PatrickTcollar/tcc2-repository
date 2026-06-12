@@ -75,21 +75,49 @@ class EvolutionController extends Controller
             return back()->with('error', 'Nenhum exame com texto extraível encontrado para este paciente no período. Certifique-se de que os PDFs contêm texto.');
         }
 
-        // 1. Construção do Prompt Aprimorado
-        $prompt = "Você é um assistente especializado em fisioterapia respiratória. Sua tarefa é analisar a sequência de exames de espirometria e gerar um Laudo de Evolução. O foco deve ser em COMPARAR os resultados ao longo do tempo. Use a seguinte estrutura em Markdown:\n\n" .
-                  "## Laudo de Evolução - Paciente {$patient->name}\n\n" .
-                  "**ID do Paciente:** {$patient->id}\n\n" .
-                  "### 1. Resumo da Evolução\n" .
-                  "Gere um parágrafo conciso que resuma a tendência geral das métricas respiratórias ao longo dos exames.\n\n" .
-                  "### 2. Análise Detalhada (Comparativa)\n" .
-                  "Utilize uma lista com os pontos mais importantes, comparando os exames mais antigos com os mais recentes. Destaque:\n" .
-                  "* Mudanças no VEF1 e CVF (Em % ou valores absolutos).\n" .
-                  "* Sinais de progressão ou regressão da patologia.\n" .
-                  "* Recomendações de acompanhamento.\n\n" .
-                  "### 3. Histórico de Exames (Dados de Entrada)\n" .
-                  "Não altere ou interprete estes dados, apenas liste-os como foram fornecidos pela fonte:\n\n" .
-                  "**Atenção:** Se houver menos de dois exames válidos, gere um alerta informando que a evolução é inconclusiva.\n\n" .
-                  implode("\n\n---\n\n", $allExamsText); // Adiciona os textos de exame ao final do prompt
+        // 1. Construção do Prompt Enriquecido
+        $numExames = count($allExamsText);
+        $prompt = "Você é um especialista em pneumologia e fisioterapia respiratória com vasta experiência em interpretação de espirometria seriada. " .
+                  "Sua tarefa é elaborar um Laudo de Evolução Clínica detalhado, comparando os exames de espirometria do paciente ao longo do tempo.\n\n" .
+                  "**Diretrizes:**\n" .
+                  "- Analise cada parâmetro espirométrico individualmente e de forma comparativa\n" .
+                  "- Use os critérios da ATS/ERS para classificação dos distúrbios ventilatórios\n" .
+                  "- Quantifique as variações percentuais entre os exames quando possível\n" .
+                  "- Classifique a gravidade conforme: leve (VEF1 ≥70%), moderado (50-69%), grave (35-49%), muito grave (<35%)\n" .
+                  "- Responda sempre em português do Brasil com linguagem clínica formal\n" .
+                  "- O laudo deve ser completo — não omita seções nem trunce raciocínios\n\n" .
+                  "**Dados do Paciente:**\n" .
+                  "Nome: {$patient->name} | ID: {$patient->id} | Total de exames analisados: {$numExames}\n\n" .
+                  "---\n\n" .
+                  "Gere o laudo usando EXATAMENTE esta estrutura em Markdown:\n\n" .
+                  "## Laudo de Evolução Clínica — {$patient->name}\n\n" .
+                  "**Paciente:** {$patient->name} | **ID:** {$patient->id} | **Exames analisados:** {$numExames}\n\n" .
+                  "---\n\n" .
+                  "### 1. Síntese Clínica\n" .
+                  "Escreva 2 a 3 parágrafos descrevendo a tendência geral da função pulmonar ao longo dos exames, incluindo o tipo de distúrbio ventilátório identificado (obstrutivo, restritivo, misto ou ausente) e sua evolução.\n\n" .
+                  "### 2. Análise Comparativa dos Parâmetros Espirométricos\n" .
+                  "Compare sistematicamente os seguintes parâmetros entre os exames (quando disponíveis):\n" .
+                  "- **CVF** (Capacidade Vital Forçada): valores absolutos, % do previsto e variação entre exames\n" .
+                  "- **VEF1** (Volume Expiratório Forçado no 1º segundo): valores, % do previsto e variação\n" .
+                  "- **Relação VEF1/CVF**: classificação do distúrbio obstrutivo\n" .
+                  "- **FEF 25-75%**: fluxo expiratório forçado médio (vias aéreas pequenas)\n" .
+                  "- **PFE** (Pico de Fluxo Expiratório): quando disponível\n" .
+                  "- **Resposta ao broncodilatador**: se realizado, descreva a reversibilidade\n\n" .
+                  "### 3. Classificação e Gravidade\n" .
+                  "- Tipo de distúrbio ventilátório predominante\n" .
+                  "- Grau de gravidade atual (leve/moderado/grave/muito grave)\n" .
+                  "- Comparação com exame(s) anterior(es): melhora, estabilidade ou piora\n\n" .
+                  "### 4. Interpretação Clínica e Correlações\n" .
+                  "Discuta as possíveis implicações clínicas dos achados, possíveis diagnósticos diferenciais compatíveis com o padrão encontrado e fatores que podem influenciar os resultados (esforço do paciente, calibração do equipamento, etc.).\n\n" .
+                  "### 5. Recomendações\n" .
+                  "Liste recomendações objetivas para conduta clínica, como:\n" .
+                  "- Necessidade de repetição do exame\n" .
+                  "- Ajuste de tratamento farmacológico ou fisioterapêutico\n" .
+                  "- Encaminhamentos sugeridos\n" .
+                  "- Frequência de reavaliação\n\n" .
+                  "### 6. Dados Brutos dos Exames\n" .
+                  "Transcreva abaixo os dados originais de cada exame sem alterações:\n\n" .
+                  implode("\n\n---\n\n", $allExamsText);
 
         $apiKey = config('services.gemini.key');
         // Usando gemini-2.5-flash, o modelo recomendado e mais robusto.
@@ -105,8 +133,8 @@ class EvolutionController extends Controller
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.7,
-                'maxOutputTokens' => 2000,
+                'temperature' => 0.3,
+                'maxOutputTokens' => 8192,
             ]
         ];
 
