@@ -93,39 +93,38 @@
             <input type="hidden" name="signature_image" id="signature_image_input">
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nome completo do profissional <span class="text-red-500">*</span></label>
+                <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px;">Nome completo do profissional <span style="color:#ef4444;">*</span></label>
                 <input type="text" name="signed_by" required placeholder="Ex: Dr. João da Silva"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                       style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:8px 12px;font-size:13px;color:#111827;outline:none;box-sizing:border-box;">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">CRF / Registro profissional <span class="text-red-500">*</span></label>
-                <input type="text" name="signer_crf" required placeholder="Ex: CRF-SP 123456"
-                       class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px;">CRF / Registro profissional <span style="color:#ef4444;">*</span></label>
+                <input type="text" name="signer_crf" required placeholder="Ex: CREFITO-3 123456"
+                       style="width:100%;border:1px solid #d1d5db;border-radius:8px;padding:8px 12px;font-size:13px;color:#111827;outline:none;box-sizing:border-box;">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Assinatura <span class="text-red-500">*</span></label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg bg-gray-50" style="touch-action: none;">
-                    <canvas id="signature-canvas" width="460" height="150" class="w-full rounded-lg cursor-crosshair"></canvas>
-                </div>
-                <div class="flex gap-2 mt-2">
+                <label style="display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:4px;">Assinatura <span style="color:#ef4444;">*</span></label>
+                <canvas id="signature-canvas"
+                        style="display:block;width:100%;height:150px;border:2px dashed #d1d5db;border-radius:8px;background:#f9fafb;cursor:crosshair;touch-action:none;"></canvas>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
                     <button type="button" onclick="clearSignature()"
-                            class="text-xs text-red-600 hover:text-red-800 border border-red-300 rounded px-3 py-1 transition">
-                        <i class="fas fa-eraser mr-1"></i> Limpar
+                            style="font-size:12px;color:#dc2626;border:1px solid #fca5a5;border-radius:6px;padding:4px 10px;background:white;cursor:pointer;">
+                        <i class="fas fa-eraser" style="margin-right:4px;"></i> Limpar
                     </button>
-                    <span class="text-xs text-gray-400 self-center">Assine com o mouse ou toque na tela</span>
+                    <span style="font-size:12px;color:#9ca3af;">Assine com o mouse ou toque na tela</span>
                 </div>
             </div>
 
-            <div class="flex gap-3 pt-2">
+            <div style="display:flex;gap:12px;padding-top:8px;">
                 <button type="button" onclick="document.getElementById('modal-assinatura').classList.add('hidden')"
-                        class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition text-sm">
+                        style="flex:1;padding:10px;border:1px solid #d1d5db;color:#374151;background:white;border-radius:8px;font-size:14px;cursor:pointer;">
                     Cancelar
                 </button>
                 <button type="button" onclick="submitSignature()"
-                        class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition text-sm font-medium">
-                    <i class="fas fa-check mr-1"></i> Confirmar Assinatura
+                        style="flex:1;padding:10px;background:#059669;color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;">
+                    <i class="fas fa-check" style="margin-right:4px;"></i> Confirmar Assinatura
                 </button>
             </div>
         </form>
@@ -141,23 +140,20 @@ let signaturePad;
 window.onload = function () {
     const canvas = document.getElementById('signature-canvas');
     if (canvas) {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width * ratio;
+        canvas.height = 150 * ratio;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = '150px';
+        canvas.getContext('2d').scale(ratio, ratio);
+
         signaturePad = new SignaturePad(canvas, {
             backgroundColor: 'rgb(249,250,251)',
             penColor: 'rgb(17,24,39)',
             minWidth: 1,
             maxWidth: 2.5,
         });
-
-        function resizeCanvas() {
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width * ratio;
-            canvas.height = 150 * ratio;
-            canvas.getContext('2d').scale(ratio, ratio);
-            signaturePad.clear();
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
     }
 
     // Download PDF
