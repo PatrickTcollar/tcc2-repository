@@ -35,20 +35,26 @@
 
             {{-- Bloco de assinatura (exibido após assinar) --}}
             @if($report->signed_at)
-            <div id="signature-block" class="mt-8 border-2 border-green-600 rounded-lg p-6 bg-green-50">
-                <div class="flex items-start justify-between flex-wrap gap-6">
+            <div style="margin-top:2rem;padding:1rem 1.25rem;border:1.5px solid #16a34a;border-radius:10px;background:#f0fdf4;">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
                     <div>
-                        <p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Assinado digitalmente por</p>
-                        <p class="text-lg font-bold text-gray-800">{{ $report->signed_by }}</p>
-                        <p class="text-sm text-gray-600">CRF: {{ $report->signer_crf }}</p>
-                        <p class="text-sm text-gray-500 mt-1">
-                            <i class="fas fa-check-circle text-green-600 mr-1"></i>
+                        <p style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Assinado digitalmente por</p>
+                        <p style="font-size:16px;font-weight:700;color:#111827;">{{ $report->signed_by }}</p>
+                        <p style="font-size:13px;color:#4b5563;">CREFITO: {{ $report->signer_crf }}</p>
+                        <p style="font-size:12px;color:#6b7280;margin-top:4px;">
+                            <i class="fas fa-check-circle" style="color:#16a34a;margin-right:4px;"></i>
                             Assinado em {{ $report->signed_at->format('d/m/Y \à\s H:i') }}
                         </p>
                     </div>
-                    <div class="border border-gray-300 rounded bg-white p-2">
-                        <img src="{{ $report->signature_image }}" alt="Assinatura" class="h-20 object-contain">
-                    </div>
+                    <button type="button" onclick="toggleAssinatura()"
+                            style="padding:8px 16px;background:#16a34a;color:white;border:none;border-radius:8px;font-size:13px;cursor:pointer;">
+                        <i class="fas fa-signature" style="margin-right:6px;"></i>
+                        <span id="btn-assinatura-texto">Ver assinatura</span>
+                    </button>
+                </div>
+                <div id="assinatura-imagem" style="display:none;margin-top:1rem;border-top:1px solid #bbf7d0;padding-top:1rem;text-align:center;">
+                    <p style="font-size:11px;color:#6b7280;margin-bottom:8px;">Assinatura manuscrita digitalizada</p>
+                    <img src="{{ $report->signature_image }}" alt="Assinatura" style="max-height:100px;border:1px solid #d1d5db;border-radius:6px;background:white;padding:8px;">
                 </div>
             </div>
             @endif
@@ -192,6 +198,18 @@ window.onload = function () {
         doc.save(`laudo_${reportId}_${patientName.replace(/\s+/g, '_')}.pdf`);
     });
 };
+
+function toggleAssinatura() {
+    const div = document.getElementById('assinatura-imagem');
+    const btn = document.getElementById('btn-assinatura-texto');
+    if (div.style.display === 'none') {
+        div.style.display = 'block';
+        btn.textContent = 'Ocultar assinatura';
+    } else {
+        div.style.display = 'none';
+        btn.textContent = 'Ver assinatura';
+    }
+}
 
 function abrirModal() {
     document.getElementById('modal-assinatura').classList.remove('hidden');
