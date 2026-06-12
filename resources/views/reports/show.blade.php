@@ -56,7 +56,7 @@
 
         <div class="mt-6 flex flex-wrap justify-center gap-4">
             @if(!$report->signed_at)
-            <button onclick="document.getElementById('modal-assinatura').classList.remove('hidden')"
+            <button onclick="abrirModal()"
                     class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-base font-medium rounded-md shadow transition">
                 <i class="fas fa-signature mr-2"></i> Validar e Assinar
             </button>
@@ -138,23 +138,7 @@
 let signaturePad;
 
 window.onload = function () {
-    const canvas = document.getElementById('signature-canvas');
-    if (canvas) {
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * ratio;
-        canvas.height = 150 * ratio;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = '150px';
-        canvas.getContext('2d').scale(ratio, ratio);
-
-        signaturePad = new SignaturePad(canvas, {
-            backgroundColor: 'rgb(249,250,251)',
-            penColor: 'rgb(17,24,39)',
-            minWidth: 1,
-            maxWidth: 2.5,
-        });
-    }
+    // SignaturePad é inicializado quando o modal abre (canvas oculto tem width=0)
 
     // Download PDF
     const { jsPDF } = window.jspdf;
@@ -208,6 +192,31 @@ window.onload = function () {
         doc.save(`laudo_${reportId}_${patientName.replace(/\s+/g, '_')}.pdf`);
     });
 };
+
+function abrirModal() {
+    document.getElementById('modal-assinatura').classList.remove('hidden');
+    setTimeout(function() {
+        const canvas = document.getElementById('signature-canvas');
+        if (!canvas) return;
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        const w = canvas.offsetWidth;
+        canvas.width = w * ratio;
+        canvas.height = 150 * ratio;
+        canvas.style.width = w + 'px';
+        canvas.style.height = '150px';
+        const ctx = canvas.getContext('2d');
+        ctx.scale(ratio, ratio);
+        ctx.fillStyle = 'rgb(249,250,251)';
+        ctx.fillRect(0, 0, w, 150);
+        if (signaturePad) signaturePad.off();
+        signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(249,250,251)',
+            penColor: 'rgb(17,24,39)',
+            minWidth: 1,
+            maxWidth: 2.5,
+        });
+    }, 50);
+}
 
 function clearSignature() {
     if (signaturePad) signaturePad.clear();
