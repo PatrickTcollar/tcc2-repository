@@ -29,11 +29,12 @@
                     <x-nav-link :href="route('evolucao.index')" :active="request()->routeIs('evolucao.index') || request()->routeIs('evolucao.analyze')">
                         Evolução
                     </x-nav-link>
-                    @auth
-                    <x-nav-link :href="auth()->user()->clinic ? route('clinics.show', auth()->user()->clinic) : route('clinics.create')" :active="request()->routeIs('clinics.*')">
-                        Clínica
+                    <x-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
+                        Upload
                     </x-nav-link>
-                    @endauth
+                    <x-nav-link :href="route('chat.upload.form')" :active="request()->routeIs('chat.upload.form') || request()->routeIs('exames.chat')">
+                        Chat IA
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -46,9 +47,7 @@
                     </span>
                     <div class="text-left">
                         <div class="text-sm font-semibold text-gray-700">{{ Auth::user()->name }}</div>
-                        @if(Auth::user()->clinic)
-                            <div class="text-xs text-gray-400">{{ Auth::user()->clinic->name }}</div>
-                        @endif
+                        <div class="text-xs text-gray-400">{{ Auth::user()->email }}</div>
                     </div>
                     <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -62,15 +61,6 @@
                     <div class="px-4 py-3 border-b border-gray-100">
                         <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
-                        @if(Auth::user()->clinic)
-                            <p class="text-xs text-indigo-600 font-medium mt-1">
-                                <i class="fas fa-hospital mr-1"></i>{{ Auth::user()->clinic->name }}
-                            </p>
-                        @else
-                            <p class="text-xs text-amber-500 mt-1">
-                                <i class="fas fa-exclamation-circle mr-1"></i>Sem clínica vinculada
-                            </p>
-                        @endif
                     </div>
 
                     {{-- Botão Sair --}}
@@ -93,17 +83,6 @@
                        class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
                         <i class="fas fa-sliders-h text-gray-400"></i> Preferências de IA
                     </a>
-                    @if(Auth::user()->clinic)
-                        <a href="{{ route('clinics.show', Auth::user()->clinic) }}"
-                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
-                            <i class="fas fa-hospital text-gray-400"></i> Minha Clínica
-                        </a>
-                    @else
-                        <a href="{{ route('clinics.create') }}"
-                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
-                            <i class="fas fa-plus-circle text-gray-400"></i> Cadastrar Clínica
-                        </a>
-                    @endif
                 </div>
 
                 <script>
@@ -149,6 +128,12 @@
             <x-responsive-nav-link :href="route('evolucao.index')" :active="request()->routeIs('evolucao.index') || request()->routeIs('evolucao.analyze')">
                 Evolução
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
+                Upload
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('chat.upload.form')" :active="request()->routeIs('chat.upload.form') || request()->routeIs('exames.chat')">
+                Chat IA
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -160,9 +145,6 @@
                 <div>
                     <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
                     <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                    @if(Auth::user()->clinic)
-                        <div class="text-xs text-indigo-600 font-medium">{{ Auth::user()->clinic->name }}</div>
-                    @endif
                 </div>
             </div>
 
