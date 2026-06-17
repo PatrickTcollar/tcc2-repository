@@ -88,6 +88,17 @@
                        class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
                         <i class="fas fa-sliders-h text-gray-400"></i> Preferências de IA
                     </a>
+                    @if(Auth::user()->clinic)
+                        <a href="{{ route('clinics.show', Auth::user()->clinic) }}"
+                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                            <i class="fas fa-hospital text-gray-400"></i> Minha Clínica
+                        </a>
+                    @else
+                        <a href="{{ route('clinics.create') }}"
+                           class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                            <i class="fas fa-plus-circle text-gray-400"></i> Cadastrar Clínica
+                        </a>
+                    @endif
                 </div>
 
                 <script>
