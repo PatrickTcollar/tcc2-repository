@@ -12,7 +12,12 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $exams = Exam::with(['report', 'patient'])->orderBy('upload_date', 'desc')->get();
+        $exams = Exam::with(['report', 'patient'])
+            ->whereHas('patient', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->orderBy('upload_date', 'desc')
+            ->get();
         return view('exams.index', compact('exams'));
     }
 

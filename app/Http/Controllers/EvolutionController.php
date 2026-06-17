@@ -20,9 +20,10 @@ class EvolutionController extends Controller
      */
     public function index()
     {
-        // Busca todos os pacientes para o select
-        // 'with('exams')' garante que a coleção de exames está carregada para a view
-        $patients = Patient::with('exams')->get();
+        // Busca pacientes do usuário autenticado
+        $patients = Patient::with('exams')
+            ->where('user_id', auth()->id())
+            ->get();
         return view('evolucao.index', compact('patients'));
     }
 

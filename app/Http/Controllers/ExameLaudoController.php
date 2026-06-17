@@ -18,7 +18,11 @@ class ExameLaudoController extends Controller
      */
     public function index()
     {
-        $laudos = Report::orderBy('id', 'asc')->get();
+        $laudos = Report::whereHas('exam.patient', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->orWhereHas('patient', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->orderBy('id', 'asc')->get();
         return view('reports.index', compact('laudos'));
     }
 
