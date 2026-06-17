@@ -20,7 +20,10 @@
                     <x-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')">
                         Pacientes
                     </x-nav-link>
-                    <x-nav-link :href="route('exames.index')" :active="request()->routeIs('exames.index') || request()->routeIs('exams.upload.form')">
+                    <x-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
+                        Upload
+                    </x-nav-link>
+                    <x-nav-link :href="route('exames.index')" :active="request()->routeIs('exames.index')">
                         Exames
                     </x-nav-link>
                     <x-nav-link :href="route('laudos.index')" :active="request()->routeIs('laudos.index') || request()->routeIs('reports.show')">
@@ -28,9 +31,6 @@
                     </x-nav-link>
                     <x-nav-link :href="route('evolucao.index')" :active="request()->routeIs('evolucao.index') || request()->routeIs('evolucao.analyze')">
                         Evolução
-                    </x-nav-link>
-                    <x-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
-                        Upload
                     </x-nav-link>
                     <x-nav-link :href="route('chat.upload.form')" :active="request()->routeIs('chat.upload.form') || request()->routeIs('exames.chat')">
                         Chat IA
@@ -119,7 +119,10 @@
             <x-responsive-nav-link :href="route('pacientes.index')" :active="request()->routeIs('pacientes.index')">
                 Pacientes
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('exames.index')" :active="request()->routeIs('exames.index') || request()->routeIs('exams.upload.form')">
+            <x-responsive-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
+                Upload
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('exames.index')" :active="request()->routeIs('exames.index')">
                 Exames
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('laudos.index')" :active="request()->routeIs('laudos.index') || request()->routeIs('reports.show')">
@@ -127,9 +130,6 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('evolucao.index')" :active="request()->routeIs('evolucao.index') || request()->routeIs('evolucao.analyze')">
                 Evolução
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('exams.upload.form')" :active="request()->routeIs('exams.upload.form')">
-                Upload
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('chat.upload.form')" :active="request()->routeIs('chat.upload.form') || request()->routeIs('exames.chat')">
                 Chat IA
