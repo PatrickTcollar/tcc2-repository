@@ -133,7 +133,7 @@ class EvolutionController extends Controller
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.3,
+                'temperature' => auth()->user()->ia_temperature,
                 'maxOutputTokens' => 8192,
             ]
         ];

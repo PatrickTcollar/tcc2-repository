@@ -89,6 +89,10 @@
                        class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
                         <i class="fas fa-user text-gray-400"></i> Meu Perfil
                     </a>
+                    <a href="{{ route('ia-preferences.show') }}"
+                       class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
+                        <i class="fas fa-sliders-h text-gray-400"></i> Preferências de IA
+                    </a>
                     @if(Auth::user()->clinic)
                         <a href="{{ route('clinics.show', Auth::user()->clinic) }}"
                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition duration-150">
@@ -165,6 +169,9 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     <i class="fas fa-user mr-2"></i> Meu Perfil
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('ia-preferences.show')">
+                    <i class="fas fa-sliders-h mr-2"></i> Preferências de IA
                 </x-responsive-nav-link>
 
                 <form method="POST" action="{{ route('logout') }}">

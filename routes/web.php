@@ -10,6 +10,7 @@ use App\Http\Controllers\EvolutionController;
 use App\Http\Controllers\ExamChatController;
 use App\Http\Controllers\ChatModuleController;
 use App\Http\Controllers\ClinicController;
+use App\Http\Controllers\AIPreferencesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Rotas para Preferências de IA
+    Route::get('/preferencias-ia', [AIPreferencesController::class, 'show'])->name('ia-preferences.show');
+    Route::post('/preferencias-ia', [AIPreferencesController::class, 'update'])->name('ia-preferences.update');
 
     // Rotas para Pacientes
     Route::resource('pacientes', PatientController::class);

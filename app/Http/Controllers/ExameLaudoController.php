@@ -89,6 +89,10 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
                         ]
                     ]
                 ],
+                'generationConfig' => [
+                    'temperature' => auth()->user()->ia_temperature,
+                    'maxOutputTokens' => 2000,
+                ],
             ];
 
             // ** ADICIONE O LOG AQUI (Entre as linhas 93 e 95) **

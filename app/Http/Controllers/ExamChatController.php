@@ -83,7 +83,7 @@ class ExamChatController extends Controller
                 ]
             ],
             'generationConfig' => [
-                'temperature' => 0.4,
+                'temperature' => auth()->user()->ia_temperature,
                 'maxOutputTokens' => 8192,
             ]
         ];
