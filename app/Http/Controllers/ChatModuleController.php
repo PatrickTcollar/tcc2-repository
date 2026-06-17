@@ -18,7 +18,7 @@ class ChatModuleController extends Controller
      */
     public function showUploadFormForChat()
     {
-        $patients = Patient::all(); // Busca todos os pacientes para o select
+        $patients = Patient::where('user_id', auth()->id())->get();
         return view('chat.upload', compact('patients'));
     }
 
@@ -38,7 +38,7 @@ class ChatModuleController extends Controller
         ]);
 
         try {
-            $patient = Patient::findOrFail($request->input('patient_id'));
+            $patient = Patient::where('user_id', auth()->id())->findOrFail($request->input('patient_id'));
             $file = $request->file('exam_file');
 
             // 2. Armazenar o arquivo PDF

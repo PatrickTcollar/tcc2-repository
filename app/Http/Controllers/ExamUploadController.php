@@ -17,7 +17,7 @@ class ExamUploadController extends Controller
      */
     public function showUploadForm()
     {
-        $patients = Patient::all(); // Busca todos os pacientes para o select
+        $patients = Patient::where('user_id', auth()->id())->get();
         return view('exams.upload_form', compact('patients'));
     }
 
@@ -35,7 +35,7 @@ class ExamUploadController extends Controller
         ]);
 
         try {
-            $patient = Patient::findOrFail($request->input('patient_id'));
+            $patient = Patient::where('user_id', auth()->id())->findOrFail($request->input('patient_id'));
             $file = $request->file('exam_file');
 
             // Gera um nome único para o arquivo
