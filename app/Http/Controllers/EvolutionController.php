@@ -4,171 +4,134 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Patient;
-use App\Models\Exam;
 use App\Models\Report;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
-use Smalot\PdfParser\Parser;
 use Exception;
 
 class EvolutionController extends Controller
 {
-    /**
-     * Exibe o formulário para selecionar o paciente e gerar o laudo de evolução.
-     * Mapeado para GET /evolucao
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        // Busca pacientes do usuário autenticado
-        $patients = Patient::with('exams')
+        $patients = Patient::with(['reports' => function ($q) {
+                $q->whereNotNull('exam_id')->orderBy('generation_date');
+            }])
             ->where('user_id', auth()->id())
-            ->get();
+            ->get()
+            ->filter(fn($p) => $p->reports->count() >= 1);
+
         return view('evolucao.index', compact('patients'));
     }
 
-    /**
-     * Analisa a evolução de um paciente com base em seus exames ao longo do tempo.
-     * Mapeado para POST /evolucao/analisar
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function analyzeEvolution(Request $request)
     {
         $request->validate([
             'patient_id' => 'required|exists:patients,id',
         ]);
 
-        $patientId = $request->input('patient_id');
-        // Carrega o paciente com seus exames.
-        $patient = Patient::with(['exams'])->find($patientId);
+        $patient = Patient::where('user_id', auth()->id())
+            ->findOrFail($request->patient_id);
 
-        if (!$patient) {
-            return back()->with('error', 'Paciente não encontrado.');
+        $reports = Report::whereNotNull('exam_id')
+            ->whereHas('exam.patient', fn($q) => $q->where('id', $patient->id))
+            ->orderBy('generation_date')
+            ->get();
+
+        if ($reports->count() < 1) {
+            return back()->with('error', 'Este paciente não possui laudos individuais gerados. Gere ao menos um laudo antes de analisar a evolução.');
         }
 
-        // Verifica se há exames para o paciente
-        if ($patient->exams->isEmpty()) {
-            return back()->with('error', 'O paciente selecionado não possui exames cadastrados.');
-        }
+        $numLaudos = $reports->count();
 
-        $allExamsText = [];
-        // Ordena por data de upload para garantir a sequência da evolução
-        foreach ($patient->exams->sortBy('upload_date') as $exam) {
-            $pdfPath = Storage::disk('public')->path($exam->file_path);
+        $laudosTexto = $reports->map(function ($report, $index) {
+            $data = $report->generation_date?->format('d/m/Y') ?? 'Data não registrada';
+            return "**Laudo " . ($index + 1) . " — gerado em {$data}**\n\n" . $report->report_content;
+        })->implode("\n\n---\n\n");
 
-            if (file_exists($pdfPath)) {
-                try {
-                    $parser = new Parser();
-                    $pdf = $parser->parseFile($pdfPath);
-                    $cleanedText = preg_replace('/\s+/', ' ', trim($pdf->getText()));
-
-                    if (!empty($cleanedText)) {
-                        $allExamsText[] = "Exame ID: {$exam->id}, Data: " . ($exam->upload_date->format('d/m/Y')) . "\nResultados:\n" . $cleanedText;
-                    }
-                } catch (Exception $e) {
-                    \Log::error("Erro ao extrair PDF para evolução (Exame ID: {$exam->id}): " . $e->getMessage());
-                }
-            }
-        }
-
-        if (empty($allExamsText)) {
-            return back()->with('error', 'Nenhum exame com texto extraível encontrado para este paciente no período. Certifique-se de que os PDFs contêm texto.');
-        }
-
-        // 1. Construção do Prompt Enriquecido
-        $numExames = count($allExamsText);
-        $prompt = "Você é um especialista em pneumologia e fisioterapia respiratória com vasta experiência em interpretação de espirometria seriada. " .
-                  "Sua tarefa é elaborar um Laudo de Evolução Clínica detalhado, comparando os exames de espirometria do paciente ao longo do tempo.\n\n" .
+        $prompt = "Você é um especialista em pneumologia e fisioterapia respiratória com vasta experiência em análise de evolução clínica seriada. " .
+                  "Sua tarefa é elaborar um Laudo de Evolução Clínica detalhado, comparando os laudos individuais de espirometria do paciente ao longo do tempo.\n\n" .
                   "**Diretrizes:**\n" .
-                  "- Analise cada parâmetro espirométrico individualmente e de forma comparativa\n" .
+                  "- Analise a progressão clínica com base nos laudos já interpretados\n" .
                   "- Use os critérios da ATS/ERS para classificação dos distúrbios ventilatórios\n" .
-                  "- Quantifique as variações percentuais entre os exames quando possível\n" .
+                  "- Identifique tendências de melhora, estabilidade ou piora entre os laudos\n" .
                   "- Classifique a gravidade conforme: leve (VEF1 ≥70%), moderado (50-69%), grave (35-49%), muito grave (<35%)\n" .
                   "- Responda sempre em português do Brasil com linguagem clínica formal\n" .
-                  "- O laudo deve ser completo — não omita seções nem trunce raciocínios\n\n" .
+                  "- O laudo deve ser completo — não omita seções nem truncue raciocínios\n\n" .
                   "**Dados do Paciente:**\n" .
-                  "Nome: {$patient->name} | ID: {$patient->id} | Total de exames analisados: {$numExames}\n\n" .
+                  "Nome: {$patient->name} | ID: {$patient->id} | Total de laudos analisados: {$numLaudos}\n\n" .
                   "---\n\n" .
                   "Gere o laudo usando EXATAMENTE esta estrutura em Markdown:\n\n" .
                   "## Laudo de Evolução Clínica — {$patient->name}\n\n" .
-                  "**Paciente:** {$patient->name} | **ID:** {$patient->id} | **Exames analisados:** {$numExames}\n\n" .
+                  "**Paciente:** {$patient->name} | **ID:** {$patient->id} | **Laudos analisados:** {$numLaudos}\n\n" .
                   "---\n\n" .
                   "### 1. Síntese Clínica\n" .
-                  "Escreva 2 a 3 parágrafos descrevendo a tendência geral da função pulmonar ao longo dos exames, incluindo o tipo de distúrbio ventilátório identificado (obstrutivo, restritivo, misto ou ausente) e sua evolução.\n\n" .
-                  "### 2. Análise Comparativa dos Parâmetros Espirométricos\n" .
-                  "Compare sistematicamente os seguintes parâmetros entre os exames (quando disponíveis):\n" .
-                  "- **CVF** (Capacidade Vital Forçada): valores absolutos, % do previsto e variação entre exames\n" .
-                  "- **VEF1** (Volume Expiratório Forçado no 1º segundo): valores, % do previsto e variação\n" .
-                  "- **Relação VEF1/CVF**: classificação do distúrbio obstrutivo\n" .
-                  "- **FEF 25-75%**: fluxo expiratório forçado médio (vias aéreas pequenas)\n" .
-                  "- **PFE** (Pico de Fluxo Expiratório): quando disponível\n" .
-                  "- **Resposta ao broncodilatador**: se realizado, descreva a reversibilidade\n\n" .
-                  "### 3. Classificação e Gravidade\n" .
-                  "- Tipo de distúrbio ventilátório predominante\n" .
-                  "- Grau de gravidade atual (leve/moderado/grave/muito grave)\n" .
-                  "- Comparação com exame(s) anterior(es): melhora, estabilidade ou piora\n\n" .
-                  "### 4. Interpretação Clínica e Correlações\n" .
-                  "Discuta as possíveis implicações clínicas dos achados, possíveis diagnósticos diferenciais compatíveis com o padrão encontrado e fatores que podem influenciar os resultados (esforço do paciente, calibração do equipamento, etc.).\n\n" .
+                  "Escreva 2 a 3 parágrafos descrevendo a tendência geral da função pulmonar ao longo dos laudos, incluindo o tipo de distúrbio ventilatório identificado e sua evolução.\n\n" .
+                  "### 2. Análise Comparativa dos Laudos\n" .
+                  "Compare sistematicamente os achados entre os laudos, identificando:\n" .
+                  "- Variações nos parâmetros espirométricos (CVF, VEF1, relação VEF1/CVF, FEF 25-75%)\n" .
+                  "- Mudanças na classificação e gravidade do distúrbio ventilatório\n" .
+                  "- Respostas ao broncodilatador (quando presentes)\n\n" .
+                  "### 3. Classificação e Gravidade Atual\n" .
+                  "- Tipo de distúrbio ventilatório predominante no laudo mais recente\n" .
+                  "- Grau de gravidade atual\n" .
+                  "- Comparação com laudos anteriores: melhora, estabilidade ou piora\n\n" .
+                  "### 4. Interpretação Clínica\n" .
+                  "Discuta as implicações clínicas da evolução observada, possíveis diagnósticos diferenciais e fatores que podem ter influenciado a progressão.\n\n" .
                   "### 5. Recomendações\n" .
-                  "Liste recomendações objetivas para conduta clínica, como:\n" .
-                  "- Necessidade de repetição do exame\n" .
+                  "Liste recomendações objetivas para conduta clínica:\n" .
                   "- Ajuste de tratamento farmacológico ou fisioterapêutico\n" .
-                  "- Encaminhamentos sugeridos\n" .
-                  "- Frequência de reavaliação\n\n" .
-                  "### 6. Dados Brutos dos Exames\n" .
-                  "Transcreva abaixo os dados originais de cada exame sem alterações:\n\n" .
-                  implode("\n\n---\n\n", $allExamsText);
+                  "- Necessidade de novos exames\n" .
+                  "- Frequência de reavaliação\n" .
+                  "- Encaminhamentos sugeridos\n\n" .
+                  "---\n\n" .
+                  "### Laudos Individuais Utilizados como Base\n\n" .
+                  $laudosTexto;
 
         $apiKey = config('services.gemini.key');
-        // Usando gemini-2.5-flash, o modelo recomendado e mais robusto.
         $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$apiKey}";
 
         $payload = [
             'contents' => [
                 [
                     'role' => 'user',
-                    'parts' => [
-                        ['text' => $prompt]
-                    ]
+                    'parts' => [['text' => $prompt]],
                 ]
             ],
             'generationConfig' => [
-                'temperature' => auth()->user()->ia_temperature,
+                'temperature' => auth()->user()->ia_temperature ?? 0.5,
                 'maxOutputTokens' => 8192,
-            ]
+            ],
         ];
 
         try {
-            // CORREÇÃO ESSENCIAL: Adiciona withoutVerifying() para contornar o erro cURL 60 (problema de SSL) no ambiente local.
             $aiResponse = Http::timeout(120)
-                            ->withoutVerifying()
-                            ->post($apiUrl, $payload)->json();
+                ->withoutVerifying()
+                ->post($apiUrl, $payload)
+                ->json();
 
-            $evolutionReportContent = $aiResponse['candidates'][0]['content']['parts'][0]['text']
-                                      ?? 'Não foi possível gerar o laudo de evolução. Resposta da IA vazia ou estrutura inesperada.';
+            $content = $aiResponse['candidates'][0]['content']['parts'][0]['text'] ?? null;
 
-            if (empty($evolutionReportContent) || str_contains($evolutionReportContent, 'Não foi possível gerar o laudo.')) {
-                 throw new Exception('A API da IA não retornou um laudo de evolução válido. Verifique o prompt ou a resposta da API.');
+            if (empty($content)) {
+                $apiError = $aiResponse['error']['message'] ?? 'Resposta vazia.';
+                throw new Exception("A IA não retornou um laudo válido. Motivo: {$apiError}");
             }
 
-            // AQUI: Cria o laudo de evolução com a referência ao paciente.
             $evolutionReport = Report::create([
-                'patient_id' => $patient->id,
-                'exam_id' => null, // Assinala que é um laudo de evolução, não ligado a um único exame.
-                'report_content' => $evolutionReportContent,
+                'patient_id'      => $patient->id,
+                'exam_id'         => null,
+                'report_content'  => $content,
                 'generation_date' => now(),
             ]);
 
-            return redirect()->route('reports.show', $evolutionReport->id)->with('success', 'Laudo de evolução gerado com sucesso para ' . $patient->name . '!');
+            return redirect()
+                ->route('reports.show', $evolutionReport->id)
+                ->with('success', "Laudo de evolução gerado com sucesso para {$patient->name}!");
 
         } catch (\Illuminate\Http\Client\RequestException $e) {
-            // Captura erros específicos de requisições HTTP (ex: 4xx, 5xx).
-            \Log::error('Erro HTTP/API ao gerar laudo de evolução: ' . ($e->response ? $e->response->body() : $e->getMessage()));
-            return back()->with('error', 'Erro na comunicação com a API da IA. Verifique sua chave ou limites de uso. Detalhes no log.');
+            \Log::error('Erro HTTP ao gerar laudo de evolução: ' . ($e->response ? $e->response->body() : $e->getMessage()));
+            return back()->with('error', 'Erro na comunicação com a API da IA. Verifique sua chave ou limites de uso.');
         } catch (Exception $e) {
-            \Log::error('Erro geral ao gerar laudo de evolução para paciente ' . $patient->name . ': ' . $e->getMessage());
-            return back()->with('error', 'Ocorreu um erro ao gerar o laudo de evolução: ' . $e->getMessage());
+            \Log::error('Erro ao gerar laudo de evolução para ' . $patient->name . ': ' . $e->getMessage());
+            return back()->with('error', 'Ocorreu um erro: ' . $e->getMessage());
         }
     }
 }

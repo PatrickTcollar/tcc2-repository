@@ -1,47 +1,69 @@
-@extends('layouts.app') {{-- Garante que esta view usa o layout principal --}}
+@extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto p-4 sm:px-6 lg:px-8">
-        <h2 class="text-4xl font-extrabold text-gray-800 mb-6 text-center">Análise de Evolução do Paciente</h2>
-        <p class="text-center text-lg text-gray-600 mb-10">
-            Selecione um paciente para gerar um laudo de evolução baseado nos seus exames anteriores.
-        </p>
+    <div class="container mx-auto p-4 sm:px-6 lg:px-8 max-w-2xl">
+        <div class="mb-8 text-center">
+            <h2 class="text-3xl font-extrabold text-gray-800">Análise de Evolução</h2>
+            <p class="text-gray-600 mt-2">Selecione um paciente para gerar um laudo comparativo baseado nos laudos individuais já gerados.</p>
+        </div>
 
-        <div class="bg-white shadow-lg rounded-lg p-8 max-w-xl mx-auto">
-            <form action="{{ route('evolucao.analyze') }}" method="POST"> {{-- AQUI: método POST --}}
-                @csrf
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">{{ session('success') }}</div>
+        @endif
 
-                <div class="mb-6">
-                    <label for="patient_id" class="block text-gray-700 text-sm font-bold mb-2">
-                        Selecione o Paciente:
-                    </label>
-                    <select name="patient_id" id="patient_id"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required>
-                        <option value="">-- Selecione um Paciente --</option>
-                        @foreach ($patients as $patient)
-                            <option value="{{ $patient->id }}"
-                                {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
-                                {{ $patient->name }} (ID: {{ $patient->id }})
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('patient_id')
-                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">{{ session('error') }}</div>
+        @endif
 
-                <div class="flex items-center justify-between">
-                    <button type="submit"
-                            class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
-                        <i class="fas fa-magic mr-2"></i> Gerar Laudo de Evolução
-                    </button>
-                    <a href="{{ route('dashboard') }}"
-                       class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-indigo-600 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
-                        <i class="fas fa-arrow-left mr-2"></i> Voltar
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            @if($patients->isEmpty())
+                <div style="text-align:center; padding: 32px 0;">
+                    <i class="fas fa-file-medical" style="font-size: 48px; color: #d1d5db; margin-bottom: 16px;"></i>
+                    <p style="color: #6b7280; font-size: 15px;">Nenhum paciente possui laudos individuais gerados ainda.</p>
+                    <p style="color: #9ca3af; font-size: 13px; margin-top: 8px;">Faça o upload de um exame e gere o laudo individual primeiro.</p>
+                    <a href="{{ route('exams.upload.form') }}" style="display:inline-block; margin-top: 20px; padding: 10px 24px; background:#4f46e5; color:white; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600;">
+                        <i class="fas fa-upload" style="margin-right:6px;"></i> Fazer Upload de Exame
                     </a>
                 </div>
-            </form>
+            @else
+                <form action="{{ route('evolucao.analyze') }}" method="POST">
+                    @csrf
+
+                    <div class="mb-6">
+                        <label for="patient_id" style="display:block; font-weight:600; color:#374151; margin-bottom:8px; font-size:14px;">
+                            Selecione o Paciente:
+                        </label>
+                        <select name="patient_id" id="patient_id" required
+                                style="width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:8px; font-size:14px; color:#374151; background:white;">
+                            <option value="">-- Selecione um Paciente --</option>
+                            @foreach ($patients as $patient)
+                                <option value="{{ $patient->id }}" {{ old('patient_id') == $patient->id ? 'selected' : '' }}>
+                                    {{ $patient->name }} — {{ $patient->reports->count() }} laudo(s)
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('patient_id')
+                            <p style="color:#ef4444; font-size:12px; margin-top:6px;">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:12px 16px; margin-bottom:24px; font-size:13px; color:#1e40af;">
+                        <i class="fas fa-info-circle" style="margin-right:6px;"></i>
+                        A IA irá comparar os laudos individuais do paciente selecionado e identificar a progressão clínica ao longo do tempo.
+                    </div>
+
+                    <div style="display:flex; gap:12px;">
+                        <button type="submit"
+                                style="display:inline-flex; align-items:center; padding:10px 24px; background:#4f46e5; color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;">
+                            <i class="fas fa-magic" style="margin-right:8px;"></i> Gerar Laudo de Evolução
+                        </button>
+                        <a href="{{ route('dashboard') }}"
+                           style="display:inline-flex; align-items:center; padding:10px 24px; background:#f3f4f6; color:#374151; border-radius:8px; font-size:14px; font-weight:600; text-decoration:none;">
+                            <i class="fas fa-arrow-left" style="margin-right:8px;"></i> Voltar
+                        </a>
+                    </div>
+                </form>
+            @endif
         </div>
     </div>
 @endsection
