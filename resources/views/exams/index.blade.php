@@ -66,7 +66,7 @@
                                                 Ver Laudo
                                             </a>
                                             <form action="{{ route('exams.generate_report', $exam->id) }}" method="POST" class="inline-block"
-                                                  onsubmit="return confirm('Gerar um novo laudo para este exame? O laudo anterior será mantido na lista de laudos.')">
+                                                  onsubmit="return confirm('Sobrescrever o laudo anterior? Esta ação não poderá ser desfeita.');">
                                                 @csrf
                                                 <button type="submit" style="display:inline-flex;align-items:center;padding:8px 14px;background:#d97706;border:none;border-radius:6px;font-size:11px;font-weight:700;color:white;text-transform:uppercase;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2);">
                                                     <i class="fas fa-sync-alt" style="margin-right:4px;"></i> Regenerar

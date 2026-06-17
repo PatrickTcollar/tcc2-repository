@@ -113,12 +113,18 @@ Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
                 throw new Exception("A API da IA não retornou um laudo válido. Motivo: {$apiError}. Verifique o log para detalhes se o erro persistir.");
             }
 
-            // 5. Salvar o Laudo no Banco de Dados
-            $report = Report::create([
-                'exam_id' => $exam->id,
-                'report_content' => $reportContent,
-                'generation_date' => now(),
-            ]);
+            // 5. Salvar ou Atualizar o Laudo no Banco de Dados
+            $report = Report::updateOrCreate(
+                ['exam_id' => $exam->id],
+                [
+                    'report_content' => $reportContent,
+                    'generation_date' => now(),
+                    'signed_by' => null,
+                    'signer_crf' => null,
+                    'signed_at' => null,
+                    'signature_image' => null,
+                ]
+            );
 
             return redirect()->route('reports.show', $report->id)->with('success', 'Laudo gerado com sucesso para o exame ' . $exam->original_filename . '!');
 
