@@ -68,8 +68,8 @@
                                             <form action="{{ route('exams.generate_report', $exam->id) }}" method="POST" class="inline-block"
                                                   onsubmit="return confirm('Gerar um novo laudo para este exame? O laudo anterior será mantido na lista de laudos.')">
                                                 @csrf
-                                                <button type="submit" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-600 active:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 transition ease-in-out duration-150 shadow-md">
-                                                    <i class="fas fa-sync-alt mr-1"></i> Regenerar
+                                                <button type="submit" style="display:inline-flex;align-items:center;padding:8px 14px;background:#d97706;border:none;border-radius:6px;font-size:11px;font-weight:700;color:white;text-transform:uppercase;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2);">
+                                                    <i class="fas fa-sync-alt" style="margin-right:4px;"></i> Regenerar
                                                 </button>
                                             </form>
                                         @else
