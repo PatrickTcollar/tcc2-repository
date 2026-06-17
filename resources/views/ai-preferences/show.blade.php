@@ -32,7 +32,7 @@
 
                 <div class="space-y-4">
                     {{-- Objetivo --}}
-                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition" onchange="updateStyles()"
+                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition"
                            style="border-color: {{ (float)$user->ia_temperature === 0.3 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ (float)$user->ia_temperature === 0.3 ? '#eff6ff' : 'white' }};">
                         <input type="radio" name="ia_temperature" value="0.3" {{ (float)$user->ia_temperature === 0.3 ? 'checked' : '' }}
                                style="margin-top: 2px; margin-right: 12px; width: 20px; height: 20px; cursor: pointer;">
