@@ -60,25 +60,40 @@ class ExameLaudoController extends Controller
                 throw new Exception('Não foi possível extrair texto relevante do arquivo PDF. O arquivo pode estar vazio ou ser apenas imagem.');
             }
 
-            // 2. Construir o Prompt para a Inteligência Artificial (Gemini)
-            // *** PROMPT APRIMORADO ***
-            $prompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Você deve analisar os dados brutos de espirometria fornecidos abaixo e gerar um LAUDO PROFISSIONAL em Português.
+            // 2. Construir o Prompt com dados do paciente + exame
+            $patient = $exam->patient;
+            $idade = $patient->birth_date ? $patient->birth_date->age . ' anos' : 'não informada';
+            $sexo = match($patient->gender) { 'M' => 'Masculino', 'F' => 'Feminino', default => 'Não informado' };
+            $tabagismo = match($patient->smoker) { 'sim' => 'Fumante', 'ex_fumante' => 'Ex-fumante', default => 'Não fumante' };
+            $peso = $patient->weight ? $patient->weight . ' kg' : 'não informado';
+            $altura = $patient->height ? $patient->height . ' cm' : 'não informada';
+
+            $prompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Analise os dados de espirometria abaixo considerando os dados clínicos do paciente para calcular corretamente os valores previstos e gerar um LAUDO PROFISSIONAL em Português.
+
+**DADOS DO PACIENTE:**
+- Nome: {$patient->name}
+- Idade: {$idade}
+- Sexo: {$sexo}
+- Peso: {$peso}
+- Altura: {$altura}
+- Tabagismo: {$tabagismo}
+
+Use esses dados para calcular os valores previstos (predicted) conforme critérios ATS/ERS e comparar com os valores obtidos no exame.
 
 O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
 
-## Achados Principais (Máximo 3 itens)
-[Lista concisa de métricas chave e desvios.]
+## Achados Principais
+[Lista concisa das métricas chave, valores obtidos vs. previstos e desvios relevantes.]
 
 ## Interpretação Clínica
-[Análise profissional da função pulmonar (restritiva, obstrutiva, mista ou normal). Máximo 2 parágrafos.]
+[Análise profissional da função pulmonar (restritiva, obstrutiva, mista ou normal), classificação da gravidade e correlação com o perfil clínico do paciente. Máximo 2 parágrafos.]
 
 ## Recomendações
-[Sugestões de acompanhamento ou tratamento. Máximo 1 parágrafo.]
+[Sugestões de acompanhamento ou tratamento considerando o histórico clínico. Máximo 1 parágrafo.]
 
-Se os dados estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'
+Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'
 
-Abaixo estão os resultados brutos do exame para análise: \n\n" . $cleanedText;
-            // *** FIM DO PROMPT APRIMORADO ***
+**DADOS BRUTOS DO EXAME:**\n\n" . $cleanedText;
 
             // 3. Fazer a Requisição para a API do Gemini
             $apiKey = config('services.gemini.key');

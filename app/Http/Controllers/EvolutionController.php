@@ -47,17 +47,24 @@ class EvolutionController extends Controller
             return "**Laudo " . ($index + 1) . " — gerado em {$data}**\n\n" . $report->report_content;
         })->implode("\n\n---\n\n");
 
+        $idade = $patient->birth_date ? \Carbon\Carbon::parse($patient->birth_date)->age . ' anos' : 'não informada';
+        $sexo = match($patient->gender ?? '') { 'M' => 'Masculino', 'F' => 'Feminino', default => 'Não informado' };
+        $tabagismo = match($patient->smoker ?? '') { 'sim' => 'Fumante', 'ex_fumante' => 'Ex-fumante', default => 'Não fumante' };
+        $peso = $patient->weight ? $patient->weight . ' kg' : 'não informado';
+        $altura = $patient->height ? $patient->height . ' cm' : 'não informada';
+
         $prompt = "Você é um especialista em pneumologia e fisioterapia respiratória com vasta experiência em análise de evolução clínica seriada. " .
                   "Sua tarefa é elaborar um Laudo de Evolução Clínica detalhado, comparando os laudos individuais de espirometria do paciente ao longo do tempo.\n\n" .
                   "**Diretrizes:**\n" .
                   "- Analise a progressão clínica com base nos laudos já interpretados\n" .
                   "- Use os critérios da ATS/ERS para classificação dos distúrbios ventilatórios\n" .
                   "- Identifique tendências de melhora, estabilidade ou piora entre os laudos\n" .
+                  "- Considere o perfil clínico do paciente na interpretação (idade, sexo, peso, altura, tabagismo)\n" .
                   "- Classifique a gravidade conforme: leve (VEF1 ≥70%), moderado (50-69%), grave (35-49%), muito grave (<35%)\n" .
                   "- Responda sempre em português do Brasil com linguagem clínica formal\n" .
                   "- O laudo deve ser completo — não omita seções nem truncue raciocínios\n\n" .
                   "**Dados do Paciente:**\n" .
-                  "Nome: {$patient->name} | ID: {$patient->id} | Total de laudos analisados: {$numLaudos}\n\n" .
+                  "Nome: {$patient->name} | Idade: {$idade} | Sexo: {$sexo} | Peso: {$peso} | Altura: {$altura} | Tabagismo: {$tabagismo} | Laudos analisados: {$numLaudos}\n\n" .
                   "---\n\n" .
                   "Gere o laudo usando EXATAMENTE esta estrutura em Markdown:\n\n" .
                   "## Laudo de Evolução Clínica — {$patient->name}\n\n" .
