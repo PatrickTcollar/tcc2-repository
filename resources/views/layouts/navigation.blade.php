@@ -61,6 +61,11 @@
                     <div class="px-4 py-3 border-b border-gray-100">
                         <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>
+                        @if(Auth::user()->clinic)
+                            <p class="text-xs text-indigo-600 font-medium mt-1">
+                                <i class="fas fa-hospital mr-1"></i>{{ Auth::user()->clinic->name }}
+                            </p>
+                        @endif
                     </div>
 
                     {{-- Botão Sair --}}
