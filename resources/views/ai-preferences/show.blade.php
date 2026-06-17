@@ -11,6 +11,17 @@
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">{{ session('success') }}</div>
     @endif
 
+    @if($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <strong>Erro ao salvar:</strong>
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="bg-white shadow-lg rounded-lg p-8">
         <form action="{{ route('ia-preferences.update') }}" method="POST">
             @csrf
@@ -21,9 +32,9 @@
 
                 <div class="space-y-4">
                     {{-- Objetivo --}}
-                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition"
-                           style="border-color: {{ $user->ia_temperature == 0.3 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ $user->ia_temperature == 0.3 ? '#eff6ff' : 'white' }};">
-                        <input type="radio" name="ia_temperature" value="0.3" {{ $user->ia_temperature == 0.3 ? 'checked' : '' }}
+                    <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition" onchange="updateStyles()"
+                           style="border-color: {{ (float)$user->ia_temperature === 0.3 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ (float)$user->ia_temperature === 0.3 ? '#eff6ff' : 'white' }};">
+                        <input type="radio" name="ia_temperature" value="0.3" {{ (float)$user->ia_temperature === 0.3 ? 'checked' : '' }}
                                style="margin-top: 2px; margin-right: 12px; width: 20px; height: 20px; cursor: pointer;">
                         <div>
                             <p style="font-weight: 600; color: #111827; font-size: 15px;">Objetivo</p>
@@ -35,8 +46,8 @@
 
                     {{-- Balanceado --}}
                     <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition"
-                           style="border-color: {{ $user->ia_temperature == 0.5 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ $user->ia_temperature == 0.5 ? '#eff6ff' : 'white' }};">
-                        <input type="radio" name="ia_temperature" value="0.5" {{ $user->ia_temperature == 0.5 ? 'checked' : '' }}
+                           style="border-color: {{ (float)$user->ia_temperature === 0.5 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ (float)$user->ia_temperature === 0.5 ? '#eff6ff' : 'white' }};">
+                        <input type="radio" name="ia_temperature" value="0.5" {{ (float)$user->ia_temperature === 0.5 ? 'checked' : '' }}
                                style="margin-top: 2px; margin-right: 12px; width: 20px; height: 20px; cursor: pointer;">
                         <div>
                             <p style="font-weight: 600; color: #111827; font-size: 15px;">Balanceado (Recomendado)</p>
@@ -48,8 +59,8 @@
 
                     {{-- Detalhado --}}
                     <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition"
-                           style="border-color: {{ $user->ia_temperature == 0.8 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ $user->ia_temperature == 0.8 ? '#eff6ff' : 'white' }};">
-                        <input type="radio" name="ia_temperature" value="0.8" {{ $user->ia_temperature == 0.8 ? 'checked' : '' }}
+                           style="border-color: {{ (float)$user->ia_temperature === 0.8 ? '#3b82f6' : '#e5e7eb' }}; background-color: {{ (float)$user->ia_temperature === 0.8 ? '#eff6ff' : 'white' }};">
+                        <input type="radio" name="ia_temperature" value="0.8" {{ (float)$user->ia_temperature === 0.8 ? 'checked' : '' }}
                                style="margin-top: 2px; margin-right: 12px; width: 20px; height: 20px; cursor: pointer;">
                         <div>
                             <p style="font-weight: 600; color: #111827; font-size: 15px;">Detalhado</p>
@@ -72,4 +83,24 @@
         </form>
     </div>
 </div>
+
+<script>
+function updateStyles() {
+    const value = document.querySelector('input[name="ia_temperature"]:checked').value;
+    const labels = document.querySelectorAll('label[style*="border-color"]');
+    labels.forEach(label => {
+        if (label.querySelector('input').value === value) {
+            label.style.borderColor = '#3b82f6';
+            label.style.backgroundColor = '#eff6ff';
+        } else {
+            label.style.borderColor = '#e5e7eb';
+            label.style.backgroundColor = 'white';
+        }
+    });
+}
+
+document.querySelectorAll('input[name="ia_temperature"]').forEach(radio => {
+    radio.addEventListener('change', updateStyles);
+});
+</script>
 @endsection
