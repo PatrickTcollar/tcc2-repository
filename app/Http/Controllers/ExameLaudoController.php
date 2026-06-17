@@ -18,7 +18,7 @@ class ExameLaudoController extends Controller
      */
     public function index()
     {
-        $laudos = Report::orderBy('id', 'desc')->get();
+        $laudos = Report::orderBy('id', 'asc')->get();
         return view('reports.index', compact('laudos'));
     }
 
