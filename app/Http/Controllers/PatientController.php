@@ -38,10 +38,12 @@ class PatientController extends Controller
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
             'gender'     => 'required|in:M,F',
-            'smoker'     => 'nullable|boolean',
+            'smoker'     => 'nullable|in:sim,nao,ex_fumante',
+            'weight'     => 'nullable|numeric|min:1|max:300',
+            'height'     => 'nullable|numeric|min:50|max:250',
         ]);
 
-        $validated['smoker'] = $request->boolean('smoker');
+        $validated['smoker'] = $request->input('smoker', 'nao');
         $validated['user_id'] = Auth::id();
 
         // 3. Criação do registro
@@ -93,10 +95,12 @@ class PatientController extends Controller
             'name'       => 'required|string|max:255',
             'birth_date' => 'nullable|date',
             'gender'     => 'required|in:M,F',
-            'smoker'     => 'nullable|boolean',
+            'smoker'     => 'nullable|in:sim,nao,ex_fumante',
+            'weight'     => 'nullable|numeric|min:1|max:300',
+            'height'     => 'nullable|numeric|min:50|max:250',
         ]);
 
-        $validated['smoker'] = $request->boolean('smoker');
+        $validated['smoker'] = $request->input('smoker', 'nao');
 
         $paciente->update($validated);
 

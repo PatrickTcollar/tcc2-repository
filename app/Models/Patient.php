@@ -20,15 +20,13 @@ class Patient extends Model
         'birth_date',
         'gender',
         'smoker',
+        'weight',
+        'height',
         'user_id',
     ];
 
-    /**
-     * Os atributos que devem ser convertidos (cast) para tipos nativos.
-     */
     protected $casts = [
         'birth_date' => 'datetime',
-        'smoker' => 'boolean',
     ];
 
     /**
