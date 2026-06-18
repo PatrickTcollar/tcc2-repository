@@ -121,17 +121,34 @@ Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo p
                 'payload_enviado'  => $payload
             ]);
 
-            // Realiza a requisição HTTP POST.
-            $aiResponse = Http::timeout(60)->withoutVerifying()->post($apiUrl, $payload)->json();
+            // Realiza a requisição HTTP POST com até 3 tentativas em caso de sobrecarga da API.
+            $aiResponse = null;
+            $reportContent = null;
+            $maxTentativas = 3;
+            for ($tentativa = 1; $tentativa <= $maxTentativas; $tentativa++) {
+                $aiResponse = Http::timeout(120)->withoutVerifying()->post($apiUrl, $payload)->json();
+                $reportContent = $aiResponse['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                $apiErrorMsg = $aiResponse['error']['message'] ?? '';
 
-            // 4. Processar a Resposta da IA (Mais Robusta)
-            // Tenta extrair o texto. Se 'candidates' ou 'content' não existirem, resultará em null.
-            $reportContent = $aiResponse['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                if (!empty($reportContent)) {
+                    break;
+                }
 
-            // Se o conteúdo do laudo gerado for nulo ou vazio, ou se houver um erro no retorno da API (campo 'error'),
-            // lançamos uma exceção clara.
+                $isOverload = str_contains(strtolower($apiErrorMsg), 'demand') ||
+                              str_contains(strtolower($apiErrorMsg), 'overload') ||
+                              str_contains(strtolower($apiErrorMsg), 'quota') ||
+                              str_contains(strtolower($apiErrorMsg), 'resource_exhausted');
+
+                if ($tentativa < $maxTentativas && $isOverload) {
+                    sleep(5 * $tentativa);
+                    continue;
+                }
+
+                break;
+            }
+
+            // 4. Processar a Resposta da IA
             if (empty($reportContent) || isset($aiResponse['error'])) {
-                // Se houver um erro na resposta, inclua-o na exceção para depuração
                 $apiError = $aiResponse['error']['message'] ?? 'Resposta vazia ou incompleta.';
                 throw new Exception("A API da IA não retornou um laudo válido. Motivo: {$apiError}. Verifique o log para detalhes se o erro persistir.");
             }
