@@ -157,6 +157,7 @@ Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo p
             $report = Report::updateOrCreate(
                 ['exam_id' => $exam->id],
                 [
+                    'patient_id' => $exam->patient_id,
                     'report_content' => $reportContent,
                     'generation_date' => now(),
                     'signed_by' => null,
