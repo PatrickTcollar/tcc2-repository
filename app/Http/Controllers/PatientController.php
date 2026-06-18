@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Patient;
 use App\Models\Exam;
 use App\Models\Report;
-use Illuminate\Support\Facades\Auth; // Importar a facade Auth
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
@@ -118,6 +119,11 @@ class PatientController extends Controller
         abort_if($paciente->user_id !== Auth::id(), 403);
 
         $paciente->delete();
+
+        // Reseta a sequence para o MAX(id) atual, evitando que IDs "saltem"
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("SELECT setval(pg_get_serial_sequence('patients', 'id'), COALESCE((SELECT MAX(id) FROM patients), 0))");
+        }
 
         return redirect()->route('pacientes.index')->with('success', 'Paciente excluído com sucesso!');
     }
