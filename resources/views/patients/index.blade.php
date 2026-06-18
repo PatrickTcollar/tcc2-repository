@@ -55,15 +55,15 @@
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">
-                                        {{ $paciente->birth_date ? \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y H:i') : 'N/A' }}
+                                        {{ $paciente->birth_date ? \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y') : 'N/A' }}
                                     </p>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
                                     <p class="text-gray-900 whitespace-no-wrap">{{ $paciente->gender == 'M' ? 'Masculino' : 'Feminino' }}</p>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">
-                                    <span class="{{ $paciente->smoker ? 'text-red-600 font-semibold' : 'text-gray-600' }}">
-                                        {{ $paciente->smoker ? 'Sim' : 'Não' }}
+                                    <span class="{{ $paciente->smoker === 'sim' ? 'text-red-600 font-semibold' : ($paciente->smoker === 'ex_fumante' ? 'text-orange-600 font-semibold' : 'text-gray-600') }}">
+                                        {{ $paciente->smoker === 'sim' ? 'Sim' : ($paciente->smoker === 'ex_fumante' ? 'Ex-fumante' : 'Não') }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-4 border-b border-gray-200 bg-white text-sm">

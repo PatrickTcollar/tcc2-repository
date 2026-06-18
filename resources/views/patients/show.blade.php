@@ -15,7 +15,7 @@
             </div>
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">Data de Nascimento:</strong>
-                <p class="text-gray-900">{{ \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y H:i') }}</p>
+                <p class="text-gray-900">{{ \Carbon\Carbon::parse($paciente->birth_date)->format('d/m/Y') }}</p>
             </div>
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">Gênero:</strong>
@@ -23,7 +23,7 @@
             </div>
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">Fumante:</strong>
-                <p class="text-gray-900">{{ $paciente->smoker ? 'Sim' : 'Não' }}</p>
+                <p class="text-gray-900">{{ $paciente->smoker === 'sim' ? 'Sim' : ($paciente->smoker === 'ex_fumante' ? 'Ex-fumante' : 'Não') }}</p>
             </div>
             <div class="mb-4">
                 <strong class="block text-gray-600 text-sm font-bold mb-2">Criado por (User ID):</strong>

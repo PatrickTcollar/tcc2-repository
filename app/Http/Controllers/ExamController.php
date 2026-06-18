@@ -16,7 +16,7 @@ class ExamController extends Controller
             ->whereHas('patient', function ($query) {
                 $query->where('user_id', Auth::id());
             })
-            ->orderBy('upload_date', 'desc')
+            ->orderBy('id', 'asc')
             ->get();
         return view('exams.index', compact('exams'));
     }
