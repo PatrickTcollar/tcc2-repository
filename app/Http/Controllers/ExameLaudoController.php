@@ -110,7 +110,7 @@ Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo p
                 ],
                 'generationConfig' => [
                     'temperature' => auth()->user()->ia_temperature,
-                    'maxOutputTokens' => 2000,
+                    'maxOutputTokens' => 8192,
                 ],
             ];
 
