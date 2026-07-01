@@ -205,34 +205,10 @@ O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
      */
     private function tryExtractPdfText(string $pdfPath): ?string
     {
-        try {
-            $parser = new Parser();
-            $cleaned = preg_replace('/\s+/', ' ', trim($parser->parseFile($pdfPath)->getText()));
-
-            if (empty($cleaned)) {
-                return null;
-            }
-
-            $totalChars = strlen($cleaned);
-            $spaceRatio = substr_count($cleaned, ' ') / $totalChars;
-
-            // Pouco espaços = encoding corrompido (linhas concatenadas sem separadores)
-            if ($spaceRatio < 0.05) {
-                return null;
-            }
-
-            // Token único com mais de 18 chars = palavras concatenadas (ex.: MIRSpiro)
-            // Usa strlen em vez de regex Unicode para consistência entre ambientes
-            foreach (explode(' ', $cleaned) as $token) {
-                if (strlen($token) > 18) {
-                    return null;
-                }
-            }
-
-            return $cleaned;
-        } catch (\Exception $e) {
-            return null;
-        }
+        // DIAGNÓSTICO TEMPORÁRIO: força modo visão em todos os PDFs
+        // para confirmar que o fallback Gemini Vision funciona corretamente.
+        // Remover após validação.
+        return null;
     }
 
     public function sign(Request $request, Report $report)
