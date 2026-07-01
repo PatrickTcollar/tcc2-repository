@@ -83,6 +83,12 @@ O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
             // 1. Tentar extração de texto; se falhar, usar visão (PDF inline)
             $examText = $this->tryExtractPdfText($pdfPath);
 
+            Log::info('PDF extraction mode', [
+                'exam_id' => $exam->id,
+                'mode'    => $examText !== null ? 'text' : 'vision',
+                'preview' => $examText !== null ? substr($examText, 0, 200) : null,
+            ]);
+
             if ($examText !== null) {
                 $instrucaoFallback = "\n\nSe os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'";
                 $parts = [['text' => $cabecalhoPrompt . $instrucaoFallback . "\n\n**DADOS BRUTOS DO EXAME:**\n\n" . $examText]];
@@ -210,10 +216,17 @@ O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
             $totalChars = strlen($cleaned);
             $spaceRatio = substr_count($cleaned, ' ') / $totalChars;
 
-            // Texto com menos de 5% de espaços ou com "palavras" de 20+ letras indica
-            // encoding proprietário corrompido (concatenação de palavras sem separadores).
-            if ($spaceRatio < 0.05 || preg_match('/[a-zA-Z]{20,}/', $cleaned)) {
+            // Pouco espaços = encoding corrompido (linhas concatenadas sem separadores)
+            if ($spaceRatio < 0.05) {
                 return null;
+            }
+
+            // Token único com mais de 18 chars = palavras concatenadas (ex.: MIRSpiro)
+            // Usa strlen em vez de regex Unicode para consistência entre ambientes
+            foreach (explode(' ', $cleaned) as $token) {
+                if (strlen($token) > 18) {
+                    return null;
+                }
             }
 
             return $cleaned;
