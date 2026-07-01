@@ -49,17 +49,6 @@ class ExameLaudoController extends Controller
                 throw new Exception('Arquivo PDF do exame não encontrado no diretório de armazenamento.');
             }
 
-            $parser = new Parser();
-            $pdf = $parser->parseFile($pdfPath);
-            $text = $pdf->getText();
-
-            $cleanedText = preg_replace('/\s+/', ' ', trim($text));
-
-            if (empty($cleanedText)) {
-                // Se o PDF não tiver texto, lançamos esta exceção com uma mensagem mais clara.
-                throw new Exception('Não foi possível extrair texto relevante do arquivo PDF. O arquivo pode estar vazio ou ser apenas imagem.');
-            }
-
             // 2. Construir o Prompt com dados do paciente + exame
             $patient = $exam->patient;
             $idade = $patient->birth_date ? $patient->birth_date->age . ' anos' : 'não informada';
@@ -68,7 +57,7 @@ class ExameLaudoController extends Controller
             $peso = $patient->weight ? $patient->weight . ' kg' : 'não informado';
             $altura = $patient->height ? $patient->height . ' cm' : 'não informada';
 
-            $prompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Analise os dados de espirometria abaixo considerando os dados clínicos do paciente para calcular corretamente os valores previstos e gerar um LAUDO PROFISSIONAL em Português.
+            $basePrompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Analise os dados de espirometria considerando os dados clínicos do paciente para calcular corretamente os valores previstos e gerar um LAUDO PROFISSIONAL em Português.
 
 **DADOS DO PACIENTE:**
 - Nome: {$patient->name}
@@ -91,9 +80,20 @@ O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
 ## Recomendações
 [Sugestões de acompanhamento ou tratamento considerando o histórico clínico. Máximo 1 parágrafo.]
 
-Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'
+Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'";
 
-**DADOS BRUTOS DO EXAME:**\n\n" . $cleanedText;
+            // 1. Tentar extração de texto; se falhar, usar visão (PDF inline)
+            $examText = $this->tryExtractPdfText($pdfPath);
+
+            if ($examText !== null) {
+                $parts = [['text' => $basePrompt . "\n\n**DADOS BRUTOS DO EXAME:**\n\n" . $examText]];
+            } else {
+                $pdfBase64 = base64_encode(file_get_contents($pdfPath));
+                $parts = [
+                    ['inlineData' => ['mimeType' => 'application/pdf', 'data' => $pdfBase64]],
+                    ['text' => $basePrompt . "\n\nAnalise os dados de espirometria presentes no PDF anexo."],
+                ];
+            }
 
             // 3. Fazer a Requisição para a API do Gemini
             $apiKey = config('services.gemini.key');
@@ -103,9 +103,7 @@ Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo p
                 'contents' => [
                     [
                         'role' => 'user',
-                        'parts' => [
-                            ['text' => $prompt]
-                        ]
+                        'parts' => $parts,
                     ]
                 ],
                 'generationConfig' => [
@@ -191,6 +189,36 @@ Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo p
     {
         $report->delete();
         return redirect()->route('laudos.index')->with('success', 'Laudo excluído com sucesso.');
+    }
+
+    /**
+     * Tenta extrair texto legível do PDF via smalot/pdfparser.
+     * Retorna null se o PDF for escaneado (sem texto) ou se o encoding
+     * estiver corrompido (ex.: PDFs do MIRSpiro sem espaços entre palavras).
+     */
+    private function tryExtractPdfText(string $pdfPath): ?string
+    {
+        try {
+            $parser = new Parser();
+            $cleaned = preg_replace('/\s+/', ' ', trim($parser->parseFile($pdfPath)->getText()));
+
+            if (empty($cleaned)) {
+                return null;
+            }
+
+            $totalChars = strlen($cleaned);
+            $spaceRatio = substr_count($cleaned, ' ') / $totalChars;
+
+            // Texto com menos de 5% de espaços ou com "palavras" de 20+ letras indica
+            // encoding proprietário corrompido (concatenação de palavras sem separadores).
+            if ($spaceRatio < 0.05 || preg_match('/[a-zA-Z]{20,}/', $cleaned)) {
+                return null;
+            }
+
+            return $cleaned;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function sign(Request $request, Report $report)
