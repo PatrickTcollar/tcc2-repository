@@ -57,7 +57,7 @@ class ExameLaudoController extends Controller
             $peso = $patient->weight ? $patient->weight . ' kg' : 'não informado';
             $altura = $patient->height ? $patient->height . ' cm' : 'não informada';
 
-            $basePrompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Analise os dados de espirometria considerando os dados clínicos do paciente para calcular corretamente os valores previstos e gerar um LAUDO PROFISSIONAL em Português.
+            $cabecalhoPrompt = "Aja estritamente como um **Fisioterapeuta Respiratório Sênior**. Analise os dados de espirometria considerando os dados clínicos do paciente para calcular corretamente os valores previstos e gerar um LAUDO PROFISSIONAL em Português.
 
 **DADOS DO PACIENTE:**
 - Nome: {$patient->name}
@@ -78,20 +78,21 @@ O laudo deve seguir este formato obrigatório, usando títulos em Markdown:
 [Análise profissional da função pulmonar (restritiva, obstrutiva, mista ou normal), classificação da gravidade e correlação com o perfil clínico do paciente. Máximo 2 parágrafos.]
 
 ## Recomendações
-[Sugestões de acompanhamento ou tratamento considerando o histórico clínico. Máximo 1 parágrafo.]
-
-Se os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'";
+[Sugestões de acompanhamento ou tratamento considerando o histórico clínico. Máximo 1 parágrafo.]";
 
             // 1. Tentar extração de texto; se falhar, usar visão (PDF inline)
             $examText = $this->tryExtractPdfText($pdfPath);
 
             if ($examText !== null) {
-                $parts = [['text' => $basePrompt . "\n\n**DADOS BRUTOS DO EXAME:**\n\n" . $examText]];
+                $instrucaoFallback = "\n\nSe os dados do exame estiverem ilegíveis ou faltantes, substitua todo o laudo por: 'ERRO: Não foi possível realizar a análise devido à falta de dados legíveis no exame.'";
+                $parts = [['text' => $cabecalhoPrompt . $instrucaoFallback . "\n\n**DADOS BRUTOS DO EXAME:**\n\n" . $examText]];
             } else {
+                // Modo visão: sem instrução de ERRO para não inibir a leitura visual
+                $instrucaoVisao = "\n\nO PDF do exame está em anexo. Leia visualmente todas as tabelas e valores numéricos presentes (FVC, FEV1, FEV1/FVC, LLN, %Pred, Z-Score e demais parâmetros), bem como o texto de interpretação do equipamento. Gere o laudo com base nesses dados. Se algum valor específico não estiver legível, utilize os dados disponíveis e sinalize com [valor estimado].";
                 $pdfBase64 = base64_encode(file_get_contents($pdfPath));
                 $parts = [
                     ['inlineData' => ['mimeType' => 'application/pdf', 'data' => $pdfBase64]],
-                    ['text' => $basePrompt . "\n\nAnalise os dados de espirometria presentes no PDF anexo."],
+                    ['text' => $cabecalhoPrompt . $instrucaoVisao],
                 ];
             }
 
